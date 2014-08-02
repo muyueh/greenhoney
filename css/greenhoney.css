@@ -1,0 +1,26 @@
+.dscrptholder {
+  position: relative;
+  left: 600px;
+  top: 150px;
+  width: 350px;
+}
+.idx {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.idxholder {
+  position: fixed;
+  left: 950px;
+  top: 220px;
+}
+.description {
+  height: 500px;
+  width: 300px;
+  font-family: 'PT Serif', serif;
+}
+.svgholder {
+  position: fixed;
+}
