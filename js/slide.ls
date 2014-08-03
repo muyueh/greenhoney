@@ -17,13 +17,15 @@ slChHSLFxL = -> do(builPalette! .data gnh.cdata["clr_ch"] .updateModel buildMode
 slEnHSLFxL = -> do(builPalette! .data gnh.cdata["clr_en"] .updateModel buildModel!.mdlfx "l" )
 slEnHSLFxS = -> do(builPalette! .data gnh.cdata["clr_en"] .updateModel buildModel!.mdlfx "s" )
 slChEnHSLFxs = ->
-	do(builPalette! .data gnh.cdata["clr_en"] .updateModel (buildModel!.mdlfx "s" .mdlfx("s").cr(100).cx(120)))
-	do(builPalette! .data gnh.cdata["clr_en"] .selector "encdatas" .updateModel (buildModel!.mdlfx "s" .mdlfx("l").cr(100).cx(120).cy(460)))
-	do(builPalette! .data gnh.cdata["clr_ch"] .selector "chcdatas" .updateModel (buildModel!.mdlfx "s" .mdlfx("s").cr(100).cx(360)))
-	do(builPalette! .data gnh.cdata["clr_ch"] .selector "chcdatal" .updateModel (buildModel!.mdlfx "l" .mdlfx("l").cr(100).cx(360).cy(460)))
+	do(builPalette! .data gnh.cdata["clr_en"] .updateModel (buildModel!.mdlfx("s").cr(100).cx(120)))
+	do(builPalette! .data gnh.cdata["clr_en"] .selector "encdatas" .updateModel (buildModel!.mdlfx("l").cr(100).cx(120).cy(460)))
+	do(builPalette! .data gnh.cdata["clr_ch"] .selector "chcdatas" .updateModel (buildModel!.mdlfx("s").cr(100).cx(360)))
+	do(builPalette! .data gnh.cdata["clr_ch"] .selector "chcdatal" .updateModel (buildModel!.mdlfx("l").cr(100).cx(360).cy(460)))
 
 slBatHSLFxs = ->
-	# do(builPalette! .data gnh.cdata["bat_1"] .updateModel (buildModel!.mdlfx "s" .mdlfx("s").cr(100).cx(120)))
+	do(builPalette! .data gnh.cdata["bat_1"] .selector "bat_1" .dtsr(1).updateModel (buildModel!.mdlfx "l" .cr(80).cx(100)))
+	do(builPalette! .data gnh.cdata["bat_2"] .selector "bat_2" .dtsr(1).updateModel (buildModel!.mdlfx "l" .cr(80).cx(300)))
+	do(builPalette! .data gnh.cdata["bat_3"] .selector "bat_3" .dtsr(1).updateModel (buildModel!.mdlfx "l" .cr(80).cx(500)))
 
 
 exitslChEnHSLFxs = ->
@@ -44,9 +46,9 @@ lsExplain = [
 	{"exit": (-> ), "enter": slEnHSLFxL, "text": "Here is the English Dataset (Keeping Lightness as constant)."},
 	{"exit": (-> ), "enter": slEnHSLFxS, "text": "(Keeping Saturation as constant)."},
 	{"exit": exitslChEnHSLFxs, "enter": slChEnHSLFxs, "text": "Comparing the two dataset, you can see that English has a richer entry of color names."},
-	{"exit": (-> ), "enter": slBlank, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
-	{"exit": (-> ), "enter": slBlank, "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
-	{"exit": (-> ), "enter": slBlank, "text": "A better visualization will be to split the name of the color, words by words. "},
+	{"exit": exitslChEnHSLFxs, "enter": slBatHSLFxs, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
+	# {"exit": exitStruct, "enter": enterStruct, "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
+	{"exit": (-> ), "enter": slChHSLFxS, "text": "A better visualization will be to split the name of the color, words by words. "},
 	{"exit": (-> ), "enter": slBlank, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
 	{"exit": (-> ), "enter": slBlank, "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective. "},
 	{"exit": (-> ), "enter": slBlank, "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."},
@@ -113,6 +115,7 @@ initiate-data = ->
 
 
 setupslide = -> 
+	initBar!
 	initiate-data!
 	scrolling!
 

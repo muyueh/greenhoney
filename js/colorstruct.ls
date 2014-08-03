@@ -1,11 +1,31 @@
+{Str} = require "prelude-ls"
+
+
+addClass = (array, className, it)->
+	# array[0]  + "</span>" + "<div style='display:inline; color:" + gnh.lsclr[(cleanName it)] + ";' class='cl_" + (cleanName it) + "'>" + array[1] + "</div>"
+	# array[0]  + "</span>" + "<div style='display:inline; color:" + gnh.lsclr[(cleanName it)] + ";' class='cl_" + (cleanName it) + "'>" + array[1] + "</div>"
+
+# background-
+# + "<span class='" + className + "'>" + array[1]
+
+addColor = -> 
+	"<div style='display:inline; background-color:" + gnh.lsclr[(cleanName it)] + ";' class=clrnmdots></div>"
 
 enterStruct = ->
 
 	lslsclrstruct = [
-		["Android <span class='gn'>green</span>" "Apple <span class='gn'>green</span>" "Army <span class='gn'>green</span>"]
-		["腥<span class='rd'>紅</span>" "鮭<span class='rd'>紅</span>" "暗鮭<span class='rd'>紅</span>"]
-
+		["Android green" "Apple green" "Army green"].map ->
+			it + (addColor it)
+			# cl = (it.split " ")
+			# addClass cl, "gn", it
+		["腥紅" "鮭紅" "暗鮭紅"].map ->
+			it + (addColor it)
+			# l = it.length
+			# cl = Str.split-at (l - 1), it 
+			# addClass cl, "rd", it
 	]
+
+	console.log lslsclrstruct
 
 
 	struct = {}

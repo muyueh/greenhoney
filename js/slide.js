@@ -29,12 +29,16 @@ slEnHSLFxS = function(){
   return builPalette().data(gnh.cdata["clr_en"]).updateModel(buildModel().mdlfx("s"))();
 };
 slChEnHSLFxs = function(){
-  builPalette().data(gnh.cdata["clr_en"]).updateModel(buildModel().mdlfx("s").mdlfx("s").cr(100).cx(120))();
-  builPalette().data(gnh.cdata["clr_en"]).selector("encdatas").updateModel(buildModel().mdlfx("s").mdlfx("l").cr(100).cx(120).cy(460))();
-  builPalette().data(gnh.cdata["clr_ch"]).selector("chcdatas").updateModel(buildModel().mdlfx("s").mdlfx("s").cr(100).cx(360))();
-  return builPalette().data(gnh.cdata["clr_ch"]).selector("chcdatal").updateModel(buildModel().mdlfx("l").mdlfx("l").cr(100).cx(360).cy(460))();
+  builPalette().data(gnh.cdata["clr_en"]).updateModel(buildModel().mdlfx("s").cr(100).cx(120))();
+  builPalette().data(gnh.cdata["clr_en"]).selector("encdatas").updateModel(buildModel().mdlfx("l").cr(100).cx(120).cy(460))();
+  builPalette().data(gnh.cdata["clr_ch"]).selector("chcdatas").updateModel(buildModel().mdlfx("s").cr(100).cx(360))();
+  return builPalette().data(gnh.cdata["clr_ch"]).selector("chcdatal").updateModel(buildModel().mdlfx("l").cr(100).cx(360).cy(460))();
 };
-slBatHSLFxs = function(){};
+slBatHSLFxs = function(){
+  builPalette().data(gnh.cdata["bat_1"]).selector("bat_1").dtsr(1).updateModel(buildModel().mdlfx("l").cr(80).cx(100))();
+  builPalette().data(gnh.cdata["bat_2"]).selector("bat_2").dtsr(1).updateModel(buildModel().mdlfx("l").cr(80).cx(300))();
+  return builPalette().data(gnh.cdata["bat_3"]).selector("bat_3").dtsr(1).updateModel(buildModel().mdlfx("l").cr(80).cx(500))();
+};
 exitslChEnHSLFxs = function(){
   return d3.selectAll(".calldots").transition().duration(1000).attr({
     "r": 0
@@ -74,16 +78,12 @@ lsExplain = [
     "enter": slChEnHSLFxs,
     "text": "Comparing the two dataset, you can see that English has a richer entry of color names."
   }, {
-    "exit": function(){},
-    "enter": slBlank,
+    "exit": exitslChEnHSLFxs,
+    "enter": slBatHSLFxs,
     "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"
   }, {
     "exit": function(){},
-    "enter": slBlank,
-    "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."
-  }, {
-    "exit": function(){},
-    "enter": slBlank,
+    "enter": slChHSLFxS,
     "text": "A better visualization will be to split the name of the color, words by words. "
   }, {
     "exit": function(){},
@@ -170,6 +170,7 @@ initiateData = function(){
   return sld.dscrpts = [].slice.call(document.getElementsByClassName("description"));
 };
 setupslide = function(){
+  initBar();
   initiateData();
   scrolling();
   return $(window).scroll(function(){

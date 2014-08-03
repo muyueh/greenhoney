@@ -1,4 +1,4 @@
-var listsToObj, gnh, svg, cleanName, buildModel, builPalette;
+var listsToObj, gnh, svg, cleanName, cleanPunc, buildModel, builPalette;
 listsToObj = require("prelude-ls").listsToObj;
 gnh = {};
 gnh.margin = {
@@ -7,11 +7,12 @@ gnh.margin = {
   right: 20,
   bottom: 20
 };
-gnh.w = 600 - gnh.margin.left - gnh.margin.right;
-gnh.h = 600 - gnh.margin.top - gnh.margin.bottom;
+gnh.w = 1000 - gnh.margin.left - gnh.margin.right;
+gnh.h = 800 - gnh.margin.top - gnh.margin.bottom;
 gnh.lsfl = ["clr_en", "clr_ch", "clr_fr", "bat_1", "bat_2", "bat_3"];
 gnh.cdata = {};
-gnh.r = 3;
+gnh.lsclr = {};
+gnh.barclr = {};
 svg = d3.select("body").select(".svgholder").append("svg").attr({
   "width": gnh.w + gnh.margin.left + gnh.margin.right,
   "height": gnh.h + gnh.margin.top + gnh.margin.bottom
@@ -19,7 +20,10 @@ svg = d3.select("body").select(".svgholder").append("svg").attr({
   "transform": "translate(" + gnh.margin.left + "," + gnh.margin.right + ")"
 });
 cleanName = function(str){
-  return str.replace(/,/g, "").replace(/"/g, "").replace(/\./g, "").replace(/'/g, "").replace(/-/g, "").toLowerCase();
+  return str.replace(/,/g, "").replace(/"/g, "").replace(/\./g, "").replace(/'/g, "").replace(/-/g, "").replace(/ /g, "").toLowerCase();
+};
+cleanPunc = function(str){
+  return str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "").replace(/\)/g, "").replace(/[1]/g, " ").toLowerCase();
 };
 buildModel = function(){
   var m, build;
@@ -65,6 +69,7 @@ builPalette = function(){
   p.selector = "cdots";
   p.data = [];
   p.updateModel = function(){};
+  p.dtsr = 3;
   build = function(){
     var c;
     c = svg.selectAll("." + p.selector).data(p.data, function(it){
@@ -80,13 +85,13 @@ builPalette = function(){
       },
       "r": 0
     }).transition().duration(1200).attr({
-      "r": gnh.r
+      "r": p.dtsr
     }).call(p.updateModel);
     return c.exit().transition().attr({
       "r": 0
     }).remove();
   };
-  ["selector", "data", "updateModel"].map(function(it){
+  ["selector", "data", "updateModel", "dtsr"].map(function(it){
     return build[it] = function(v){
       p[it] = v;
       return build;
@@ -99,6 +104,13 @@ builPalette = function(){
   wait = gnh.lsfl.length;
   return gnh.lsfl.map(function(it){
     return d3.tsv("./data/" + it + ".tsv", function(err, colorTSV){
+      if (colorTSV[0].name !== undefined) {
+        colorTSV = colorTSV.filter(function(it){
+          gnh.lsclr[cleanName(it.name)] = it.color;
+          it.name = cleanPunc(it.name);
+          return true;
+        });
+      }
       gnh.cdata[it] = colorTSV;
       if (--wait === 0) {
         return setupslide();

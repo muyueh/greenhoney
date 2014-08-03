@@ -1,7 +1,19 @@
-var enterStruct, exitStruct;
+var Str, addClass, addColor, enterStruct, exitStruct;
+Str = require("prelude-ls").Str;
+addClass = function(array, className, it){};
+addColor = function(it){
+  return "<div style='display:inline; background-color:" + gnh.lsclr[cleanName(it)] + ";' class=clrnmdots></div>";
+};
 enterStruct = function(){
   var lslsclrstruct, struct;
-  lslsclrstruct = [["Android <span class='gn'>green</span>", "Apple <span class='gn'>green</span>", "Army <span class='gn'>green</span>"], ["腥<span class='rd'>紅</span>", "鮭<span class='rd'>紅</span>", "暗鮭<span class='rd'>紅</span>"]];
+  lslsclrstruct = [
+    ["Android green", "Apple green", "Army green"].map(function(it){
+      return it + addColor(it);
+    }), ["腥紅", "鮭紅", "暗鮭紅"].map(function(it){
+      return it + addColor(it);
+    })
+  ];
+  console.log(lslsclrstruct);
   struct = {};
   struct.fntsize = 50;
   struct.top = 100;

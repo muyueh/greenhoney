@@ -3,8 +3,8 @@
 gnh = {}
 
 gnh.margin = {top: 10, left: 10, right: 20, bottom: 20}
-gnh.w = 600 - gnh.margin.left - gnh.margin.right
-gnh.h = 600 - gnh.margin.top - gnh.margin.bottom
+gnh.w = 1000 - gnh.margin.left - gnh.margin.right
+gnh.h = 800 - gnh.margin.top - gnh.margin.bottom
 
 
 gnh.lsfl = ["clr_en" "clr_ch" "clr_fr" "bat_1" "bat_2" "bat_3"]
@@ -13,7 +13,20 @@ gnh.cdata = {
 	# "clr_ch": 
 }
 
-gnh.r = 3
+gnh.lsclr = {
+	# parsed name: hrex
+	# "red": #00d
+	# "pink": #00d
+}
+
+gnh.barclr = {
+	# "clr_en": [
+		# {
+			# key: "blue"
+			# value: [{color: #C9FFE5, name: aero blue}]	
+		# }
+	# ]
+}
 
 svg = d3.select "body"
 	.select ".svgholder"
@@ -29,7 +42,11 @@ svg = d3.select "body"
 
 
 cleanName = (str)-> 
-	str.replace(/,/g, "").replace(/"/g, "").replace(/\./g, "").replace(/'/g, "").replace(/-/g, "").toLowerCase!
+	str.replace(/,/g, "").replace(/"/g, "").replace(/\./g, "").replace(/'/g, "").replace(/-/g, "").replace(/ /g, "").toLowerCase!
+
+cleanPunc = (str)->  str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "").replace(/\)/g, "").replace(/[1]/g, " ").toLowerCase!
+
+
 
 
 buildModel = ->
@@ -46,11 +63,8 @@ buildModel = ->
 				clr = m.mdl it.color
 				for attr of clr
 					if isNaN clr[attr] then clr[attr] = 0
-				# console.log clr
 				it.x = m.cx + Math.cos(clr.h * Math.PI / 180 ) * m.cr * clr[m.mdlfx]
 				it.y = m.cy + Math.sin(clr.h * Math.PI / 180 ) * m.cr * clr[m.mdlfx]
-			# .transition!
-			# .
 			.attr {
 				"cx": (it, i)-> it.x
 				"cy": (it, i)-> it.y
@@ -69,6 +83,7 @@ builPalette = ->
 	p.selector = "cdots"
 	p.data = []
 	p.updateModel = (->)
+	p.dtsr = 3
 
 	build = ->
 		c = svg
@@ -91,7 +106,7 @@ builPalette = ->
 			.transition!
 			.duration 1200
 			.attr {
-				"r": gnh.r	
+				"r": p.dtsr	
 			}
 			.call p.updateModel
 
@@ -104,7 +119,7 @@ builPalette = ->
 			.remove!
 
 
-	["selector" "data" "updateModel"].map ->
+	["selector" "data" "updateModel" "dtsr"].map ->
 		build[it]	:= (v)-> 
 			p[it] := v
 			build
@@ -115,8 +130,18 @@ builPalette = ->
 do ->
 	wait = gnh.lsfl.length 
 	gnh.lsfl.map ->
-		err, colorTSV <- d3.tsv "./data/" + it + ".tsv"		
+		err, colorTSV <- d3.tsv "./data/" + it + ".tsv"
+
+		if colorTSV[0].name is not undefined
+			colorTSV = colorTSV.filter ->
+				gnh.lsclr[cleanName it.name] := it.color
+				it.name = cleanPunc it.name
+
+				true
+
 		gnh.cdata[it] := colorTSV
+
+		
 
 		if --wait is 0 then setupslide!
 
