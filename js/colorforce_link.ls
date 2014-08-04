@@ -1,16 +1,25 @@
-{lists-to-obj } = require "prelude-ls"
+{lists-to-obj, join} = require "prelude-ls"
 
 buildForce = ->
 
 	f = {}
 	f.dtsr = 3
 	f.data = []
+	# f.link = [
+	# 	{source: 0, target: 1}
+	# 	{source: 0, target: 2}
+	# 	{source: 0, target: 3}
+	# 	{source: 0, target: 4}
+	# 	{source: 0, target: 5}
+	# 	{source: 0, target: 6}
+	# ]
 
 	build = ->
 
 		force = d3.layout.force!
 			.nodes f.data
 			.links []
+			# f.link
 			.gravity 0
 			.charge 0
 			.size [500, 500]
@@ -35,6 +44,14 @@ buildForce = ->
 					"cx": -> it.x
 					"cy": -> it.y
 				}
+
+			# link
+			# 	.attr {
+			# 		"x1" : -> it.source.x
+			# 		"y1" : -> it.source.y
+			# 		"x2" : -> it.target.x
+			# 		"y2" : -> it.target.y
+			# 	}
 
 		collide = ->
 			r = f.dtsr
@@ -65,18 +82,48 @@ buildForce = ->
 			.enter!
 			.append "circle"
 			.attr {
-				"class": "node"
+				"class": -> it.name + " node"
 				"r": f.dtsr
 			}
 			.style {
 				"fill": -> it.color
 			}
 			.call force.drag
+			.on "mouseenter", ->
+			# 	# console.log "click"
+				d3.selectAll join "," (it.name.split " ").map -> "." + it
+					.transition!
+					.duration 100
+					.attr {
+						"r": 10
+					}
+			.on "mouseout", -> 
+				d3.selectAll join "," (it.name.split " ").map -> "." + it
+					.transition!
+					.duration 10
+					.attr {
+						"r": 3
+					}
+
+
+		# link = svg.selectAll "line"
+		# 	.data f.link
+		# 	.enter!
+		# 	.append "line"
+		# 	.attr {
+		# 		"x1" : -> it.source.x
+		# 		"y1" : -> it.source.y
+		# 		"x2" : -> it.target.x
+		# 		"y2" : -> it.target.y
+		# 	}
+		# 	.style {
+		# 		"stroke": "red"
+		# 	}
 
 		force.start!
 
 	["data" "dtsr"].map ->
-		build[it]	:= (v)-> 
+		build[it]	:= (v)->  
 			f[it] := v
 			build
 
@@ -89,60 +136,12 @@ ifNaN = -> if isNaN it then 0 else it
 go = ->
 	dt = gnh.cdata.clr_en.filter ->
 		it.target = {}
-		# it.target.x = ifNaN (d3.hsl it.color).s * 5 + 200
-		# it.target.x = ifNaN (d3.hsl it.color).s * 600
-
-		# it.target.x = ifNaN (d3.hcl it.color).l * 10
-
-		# it.target.x = ifNaN (d3.hsl it.color).h
-		# it.target.y = ifNaN (d3.hsl it.color).s * 600
-
-		# it.target.x = ifNaN (d3.hsl it.color).l * 600
-		# it.target.y = ifNaN (d3.hsl it.color).s * 600
 
 		it.target.x = ifNaN (d3.hsl it.color).l * 600
 		it.target.y = ifNaN (d3.hsl it.color).h
 
-		# it.target.x = ifNaN (d3.hsl it.color).l * 600
-		# it.target.y = ifNaN (d3.hsl it.color).s * 600
 
-		# it.target.x = ifNaN (d3.hsl it.color).l * 600
-		# it.target.y = 100
-			# 
-
-		# it.target.x = 0
-		# it.target.y = 0
-	
-
-		# clr = d3.hsl it.color
-		# it.target.x = 250 + Math.cos((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
-		# it.target.y = 250 + Math.sin((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
-
-		# clr = d3.rgb it.color
-		# it.target.x = clr.g * 1 + 50
-		# it.target.y = clr.b * 1 + 50
-		# 100
-
-
-		# it.target.x = (ifNaN (d3.lab it.color).a + 100) * 2
-		# it.target.y = (ifNaN (d3.lab it.color).b + 100) * 2
-
-
-		# it.target.x = ifNaN (d3.hsl it.color).s * 400
-		# 	# 100
-		# it.target.y = ifNaN (d3.hsl it.color).h * 1.5
-		# it.target.y = (d3.rgb it.color).r * 2 + 200
-		# it.target.x = 100
-		# 	# (d3.hsl it.color).l * 500
-		# 	# 100
-		# it.target.y = (d3.hsl it.color).s * 500
 		true
-
-	# dt = gnh.cdata.clr_en.filter ->
-	# 	it.target = {}
-	# 	it.target.x = 100
-	# 	it.target.y = 100
-	# 	true
 
 	a = buildForce!.data dt
 	a!

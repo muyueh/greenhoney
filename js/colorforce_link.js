@@ -1,5 +1,5 @@
-var listsToObj, buildForce, ifNaN, go;
-listsToObj = require("prelude-ls").listsToObj;
+var ref$, listsToObj, join, buildForce, ifNaN, go;
+ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join;
 buildForce = function(){
   var f, build;
   f = {};
@@ -56,13 +56,27 @@ buildForce = function(){
       };
     };
     node = svg.selectAll("circle").data(f.data).enter().append("circle").attr({
-      "class": "node",
+      "class": function(it){
+        return it.name + " node";
+      },
       "r": f.dtsr
     }).style({
       "fill": function(it){
         return it.color;
       }
-    }).call(force.drag);
+    }).call(force.drag).on("mouseenter", function(it){
+      return d3.selectAll(join(",", it.name.split(" ").map(function(it){
+        return "." + it;
+      }))).transition().duration(100).attr({
+        "r": 10
+      });
+    }).on("mouseout", function(it){
+      return d3.selectAll(join(",", it.name.split(" ").map(function(it){
+        return "." + it;
+      }))).transition().duration(10).attr({
+        "r": 3
+      });
+    });
     return force.start();
   };
   ["data", "dtsr"].map(function(it){
