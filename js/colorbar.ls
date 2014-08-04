@@ -60,6 +60,9 @@ buildBar = ->
 				"color": c.color
 			}
 
+	console.log JSON.stringify flatten data
+
+
 	svg
 	.selectAll "." + b.selector
 		.data flatten data
@@ -95,3 +98,13 @@ toRect = ->
 		.duration 1200
 		# .delay (it, i)-> i * 1
 		.call rectXY
+
+sortRect = -> 
+	svg.selectAll "." + b.selector
+		.sort (a, b)-> (d3.hsl a.color).l - (d3.hsl b.color).l
+		.transition!
+		.duration 1200
+		# .delay (it, i)-> i * 1
+		.call rectXY
+
+		

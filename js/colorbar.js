@@ -1,4 +1,4 @@
-var flatten, countColor, b, initBar, barXY, rectXY, buildBar, toCircle, toBar, toRect;
+var flatten, countColor, b, initBar, barXY, rectXY, buildBar, toCircle, toBar, toRect, sortRect;
 flatten = require("prelude-ls").flatten;
 countColor = function(list, splitFunc){
   var freq;
@@ -74,6 +74,7 @@ buildBar = function(){
       };
     });
   });
+  console.log(JSON.stringify(flatten(data)));
   return svg.selectAll("." + b.selector).data(flatten(data)).enter().append("circle").attr({
     "r": b.dtsr,
     "class": b.selector
@@ -95,4 +96,9 @@ toBar = function(){
 };
 toRect = function(){
   return svg.selectAll("." + b.selector).transition().duration(1200).call(rectXY);
+};
+sortRect = function(){
+  return svg.selectAll("." + b.selector).sort(function(a, b){
+    return d3.hsl(a.color).l - d3.hsl(b.color).l;
+  }).transition().duration(1200).call(rectXY);
 };
