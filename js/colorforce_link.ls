@@ -122,8 +122,8 @@ buildForce = ->
 
 		force.start!
 
-	["data" "dtsr"].map ->
-		build[it]	:= (v)->  
+	for let it of f	
+		build[it] = (v)->  
 			f[it] := v
 			build
 
@@ -134,9 +134,9 @@ buildForce = ->
 ifNaN = -> if isNaN it then 0 else it
 
 go = ->
-	# dt = (flatten (gnh.barclr.clr_en.map -> it.value)).filter ->
+	# dt = (flatten (gnh.grpclr.clr_en.map -> it.value)).filter ->
 	col = 7
-	dt = flatten(gnh.barclr.clr_en.map (it, i)-> 
+	dt = flatten(gnh.grpclr.clr_en.map (it, i)-> 
 			r = it.value.map (c, j)->
 				# console.log c
 				tmpc = {}

@@ -1,7 +1,7 @@
 var ref$, listsToObj, join, flatten, buildForce, ifNaN, go, move;
 ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten;
 buildForce = function(){
-  var f, build;
+  var f, build, i$;
   f = {};
   f.dtsr = 3;
   f.data = [];
@@ -79,13 +79,16 @@ buildForce = function(){
     });
     return force.start();
   };
-  ["data", "dtsr"].map(function(it){
-    return build[it] = function(v){
+  for (i$ in f) {
+    (fn$.call(this, i$));
+  }
+  return build;
+  function fn$(it){
+    build[it] = function(v){
       f[it] = v;
       return build;
     };
-  });
-  return build;
+  }
 };
 ifNaN = function(it){
   if (isNaN(it)) {
@@ -97,7 +100,7 @@ ifNaN = function(it){
 go = function(){
   var col, dt, a;
   col = 7;
-  dt = flatten(gnh.barclr.clr_en.map(function(it, i){
+  dt = flatten(gnh.grpclr.clr_en.map(function(it, i){
     var r;
     r = it.value.map(function(c, j){
       var tmpc, attr;

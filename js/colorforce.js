@@ -1,13 +1,15 @@
-var listsToObj, buildForce, ifNaN, go;
+var listsToObj, buildForce, go;
 listsToObj = require("prelude-ls").listsToObj;
 buildForce = function(){
-  var f, build;
+  var f, build, i$;
   f = {};
   f.dtsr = 3;
   f.data = [];
+  f.size = 800;
+  f.margin = 1.5;
   build = function(){
     var force, collide, node;
-    force = d3.layout.force().nodes(f.data).links([]).gravity(0).charge(0).size([500, 500]).on("tick", tick);
+    force = d3.layout.force().nodes(f.data).links([]).gravity(0).charge(0).size([f.size, f.size]).on("tick", tick);
     function tick(it){
       var k, q, i, n;
       k = 0.1 * it.alpha;
@@ -43,7 +45,7 @@ buildForce = function(){
           x = it.x - quad.point.x;
           y = it.y - quad.point.y;
           l = Math.sqrt(x * x + y * y);
-          r = 2.5 * f.dtsr;
+          r = 2 * f.dtsr + f.margin;
           if (l < r) {
             l = (l - r) / l * 0.5;
             it.x -= x *= l;
@@ -65,24 +67,20 @@ buildForce = function(){
     }).call(force.drag);
     return force.start();
   };
-  ["data", "dtsr"].map(function(it){
-    return build[it] = function(v){
+  for (i$ in f) {
+    (fn$.call(this, i$));
+  }
+  return build;
+  function fn$(it){
+    build[it] = function(v){
       f[it] = v;
       return build;
     };
-  });
-  return build;
-};
-ifNaN = function(it){
-  if (isNaN(it)) {
-    return 0;
-  } else {
-    return it;
   }
 };
 go = function(){
   var dt, a;
-  dt = gnh.cdata.clr_en.filter(function(it){
+  dt = gnh.clr.clr_en.filter(function(it){
     it.target = {};
     it.target.x = ifNaN(d3.hsl(it.color).l * 600);
     it.target.y = ifNaN(d3.hsl(it.color).h);

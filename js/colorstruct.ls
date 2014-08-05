@@ -2,14 +2,14 @@
 
 
 addClass = (array, className, it)->
-	# array[0]  + "</span>" + "<div style='display:inline; color:" + gnh.lsclr[(cleanName it)] + ";' class='cl_" + (cleanName it) + "'>" + array[1] + "</div>"
-	# array[0]  + "</span>" + "<div style='display:inline; color:" + gnh.lsclr[(cleanName it)] + ";' class='cl_" + (cleanName it) + "'>" + array[1] + "</div>"
+	# array[0]  + "</span>" + "<div style='display:inline; color:" + gnh.allclrls[(cleanName it)] + ";' class='cl_" + (cleanName it) + "'>" + array[1] + "</div>"
+	# array[0]  + "</span>" + "<div style='display:inline; color:" + gnh.allclrls[(cleanName it)] + ";' class='cl_" + (cleanName it) + "'>" + array[1] + "</div>"
 
 # background-
 # + "<span class='" + className + "'>" + array[1]
 
 addColor = -> 
-	"<div style='display:inline; background-color:" + gnh.lsclr[(cleanName it)] + ";' class=clrnmdots></div>"
+	"<div style='display:inline; background-color:" + gnh.allclrls[(cleanName it)] + ";' class=clrnmdots></div>"
 
 enterStruct = ->
 
@@ -24,8 +24,6 @@ enterStruct = ->
 			# cl = Str.split-at (l - 1), it 
 			# addClass cl, "rd", it
 	]
-
-	console.log lslsclrstruct
 
 
 	struct = {}

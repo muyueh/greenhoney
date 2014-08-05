@@ -2,7 +2,7 @@ var Str, addClass, addColor, enterStruct, exitStruct;
 Str = require("prelude-ls").Str;
 addClass = function(array, className, it){};
 addColor = function(it){
-  return "<div style='display:inline; background-color:" + gnh.lsclr[cleanName(it)] + ";' class=clrnmdots></div>";
+  return "<div style='display:inline; background-color:" + gnh.allclrls[cleanName(it)] + ";' class=clrnmdots></div>";
 };
 enterStruct = function(){
   var lslsclrstruct, struct;
@@ -13,7 +13,6 @@ enterStruct = function(){
       return it + addColor(it);
     })
   ];
-  console.log(lslsclrstruct);
   struct = {};
   struct.fntsize = 50;
   struct.top = 100;

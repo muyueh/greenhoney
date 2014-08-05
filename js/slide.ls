@@ -12,20 +12,29 @@ updtBlackIdxDots = ->
 
 slBlank = -> console.log "do nothing"
 
-slChHSLFxS = -> do(builPalette! .data gnh.cdata["clr_ch"] .updateModel buildModel!)
-slChHSLFxL = -> do(builPalette! .data gnh.cdata["clr_ch"] .updateModel buildModel!.mdlfx "l" )
-slEnHSLFxL = -> do(builPalette! .data gnh.cdata["clr_en"] .updateModel buildModel!.mdlfx "l" )
-slEnHSLFxS = -> do(builPalette! .data gnh.cdata["clr_en"] .updateModel buildModel!.mdlfx "s" )
+
+slChHSLFxS = -> 
+	# console.log gnh.clr["clr_ch"]
+	do(appendCircle! .data gnh.clr["clr_ch"] .updateModel buildPallete!)
+slChHSLFxL = -> do(appendCircle! .data gnh.clr["clr_ch"] .updateModel buildPallete!.mdlfx "l" )
+slEnHSLFxL = -> do(appendCircle! .data gnh.clr["clr_en"] .updateModel buildPallete!.mdlfx "l" )
+slEnHSLFxS = -> do(appendCircle! .data gnh.clr["clr_en"] .updateModel buildPallete!.mdlfx "s" )
 slChEnHSLFxs = ->
-	do(builPalette! .data gnh.cdata["clr_en"] .updateModel (buildModel!.mdlfx("s").cr(100).cx(120)))
-	do(builPalette! .data gnh.cdata["clr_en"] .selector "encdatas" .updateModel (buildModel!.mdlfx("l").cr(100).cx(120).cy(460)))
-	do(builPalette! .data gnh.cdata["clr_ch"] .selector "chcdatas" .updateModel (buildModel!.mdlfx("s").cr(100).cx(360)))
-	do(builPalette! .data gnh.cdata["clr_ch"] .selector "chcdatal" .updateModel (buildModel!.mdlfx("l").cr(100).cx(360).cy(460)))
+	do(appendCircle! .data gnh.clr["clr_en"] .updateModel (buildPallete!.mdlfx("s").cr(100).cx(120)))
+	do(appendCircle! .data gnh.clr["clr_en"] .selector "encdatas" .updateModel (buildPallete!.mdlfx("l").cr(100).cx(120).cy(460)))
+	do(appendCircle! .data gnh.clr["clr_ch"] .selector "chcdatas" .updateModel (buildPallete!.mdlfx("s").cr(100).cx(360)))
+	do(appendCircle! .data gnh.clr["clr_ch"] .selector "chcdatal" .updateModel (buildPallete!.mdlfx("l").cr(100).cx(360).cy(460)))
 
 slBatHSLFxs = ->
-	do(builPalette! .data gnh.cdata["bat_1"] .selector "bat_1" .dtsr(1).updateModel (buildModel!.mdlfx "l" .cr(80).cx(100)))
-	do(builPalette! .data gnh.cdata["bat_2"] .selector "bat_2" .dtsr(1).updateModel (buildModel!.mdlfx "l" .cr(80).cx(300)))
-	do(builPalette! .data gnh.cdata["bat_3"] .selector "bat_3" .dtsr(1).updateModel (buildModel!.mdlfx "l" .cr(80).cx(500)))
+	do(appendCircle! .data gnh.clr["bat_1"] .selector "bat_1" .dtsr(1).updateModel (buildPallete!.mdlfx "l" .cr(80).cx(100)))
+	do(appendCircle! .data gnh.clr["bat_2"] .selector "bat_2" .dtsr(1).updateModel (buildPallete!.mdlfx "l" .cr(80).cx(300)))
+	do(appendCircle! .data gnh.clr["bat_3"] .selector "bat_3" .dtsr(1).updateModel (buildPallete!.mdlfx "l" .cr(80).cx(500)))
+
+slEnBar = ->
+	do(appendCircle! .data gnh.clr["clr_ch"] .updateModel(buildBar!) )
+
+slEnRect = -> 
+	do(appendCircle! .data gnh.clr["clr_ch"] .updateModel(buildRect!) )
 
 
 exitslChEnHSLFxs = ->
@@ -46,10 +55,10 @@ lsExplain = [
 	{"exit": (-> ), "enter": slEnHSLFxL, "text": "Here is the English Dataset (Keeping Lightness as constant)."},
 	{"exit": (-> ), "enter": slEnHSLFxS, "text": "(Keeping Saturation as constant)."},
 	{"exit": exitslChEnHSLFxs, "enter": slChEnHSLFxs, "text": "Comparing the two dataset, you can see that English has a richer entry of color names."},
-	{"exit": exitslChEnHSLFxs, "enter": slBatHSLFxs, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
+	# {"exit": exitslChEnHSLFxs, "enter": slBatHSLFxs, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
 	# {"exit": exitStruct, "enter": enterStruct, "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
-	{"exit": (-> ), "enter": slChHSLFxS, "text": "A better visualization will be to split the name of the color, words by words. "},
-	{"exit": (-> ), "enter": slBlank, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
+	{"exit": (-> ), "enter": slEnBar, "text": "A better visualization will be to split the name of the color, words by words. "},
+	{"exit": (-> ), "enter": slEnRect, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
 	{"exit": (-> ), "enter": slBlank, "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective. "},
 	{"exit": (-> ), "enter": slBlank, "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."},
 	{"exit": (-> ), "enter": slBlank, "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."},

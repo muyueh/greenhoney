@@ -110,16 +110,14 @@ buildForce = ->
 
 		force.start!
 
-	["data" "dtsr" "grpnm"].map ->
-		build[it]	:= (v)->  
+	for let it of f
+		build[it] = (v)->  
 			f[it] := v
 			build
 
 
 	build
 
-
-ifNaN = -> if isNaN it then 0 else it
 
 go = ->
 
@@ -128,7 +126,7 @@ go = ->
 	posY = -> (~~(it / (col + 1)) + 0.5) * (gnh.w / (col + 1))
 
 	grpnm = []
-	dt = flatten(gnh.barclr.clr_en.map (it, i)-> 
+	dt = flatten(gnh.grpclr.clr_en.map (it, i)-> 
 			grpnm.push {
 				name: it.key
 				x: (posX i)

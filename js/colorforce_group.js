@@ -1,7 +1,7 @@
-var ref$, listsToObj, join, flatten, isType, buildForce, ifNaN, go, hightlightGroup, move;
+var ref$, listsToObj, join, flatten, isType, buildForce, go, hightlightGroup, move;
 ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten, isType = ref$.isType;
 buildForce = function(){
-  var f, build;
+  var f, build, i$;
   f = {};
   f.dtsr = 3;
   f.data = [];
@@ -95,19 +95,15 @@ buildForce = function(){
     });
     return force.start();
   };
-  ["data", "dtsr", "grpnm"].map(function(it){
-    return build[it] = function(v){
+  for (i$ in f) {
+    (fn$.call(this, i$));
+  }
+  return build;
+  function fn$(it){
+    build[it] = function(v){
       f[it] = v;
       return build;
     };
-  });
-  return build;
-};
-ifNaN = function(it){
-  if (isNaN(it)) {
-    return 0;
-  } else {
-    return it;
   }
 };
 go = function(){
@@ -120,7 +116,7 @@ go = function(){
     return (~~(it / (col + 1)) + 0.5) * (gnh.w / (col + 1));
   };
   grpnm = [];
-  dt = flatten(gnh.barclr.clr_en.map(function(it, i){
+  dt = flatten(gnh.grpclr.clr_en.map(function(it, i){
     var r;
     grpnm.push({
       name: it.key,

@@ -1,4 +1,4 @@
-var sld, updtBlackIdxDots, slBlank, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData, setupslide;
+var sld, updtBlackIdxDots, slBlank, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, slEnBar, slEnRect, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData, setupslide;
 sld = {};
 sld.screenh = $(window).height();
 sld.hghidx = -1;
@@ -17,27 +17,33 @@ slBlank = function(){
   return console.log("do nothing");
 };
 slChHSLFxS = function(){
-  return builPalette().data(gnh.cdata["clr_ch"]).updateModel(buildModel())();
+  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildPallete())();
 };
 slChHSLFxL = function(){
-  return builPalette().data(gnh.cdata["clr_ch"]).updateModel(buildModel().mdlfx("l"))();
+  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildPallete().mdlfx("l"))();
 };
 slEnHSLFxL = function(){
-  return builPalette().data(gnh.cdata["clr_en"]).updateModel(buildModel().mdlfx("l"))();
+  return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildPallete().mdlfx("l"))();
 };
 slEnHSLFxS = function(){
-  return builPalette().data(gnh.cdata["clr_en"]).updateModel(buildModel().mdlfx("s"))();
+  return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildPallete().mdlfx("s"))();
 };
 slChEnHSLFxs = function(){
-  builPalette().data(gnh.cdata["clr_en"]).updateModel(buildModel().mdlfx("s").cr(100).cx(120))();
-  builPalette().data(gnh.cdata["clr_en"]).selector("encdatas").updateModel(buildModel().mdlfx("l").cr(100).cx(120).cy(460))();
-  builPalette().data(gnh.cdata["clr_ch"]).selector("chcdatas").updateModel(buildModel().mdlfx("s").cr(100).cx(360))();
-  return builPalette().data(gnh.cdata["clr_ch"]).selector("chcdatal").updateModel(buildModel().mdlfx("l").cr(100).cx(360).cy(460))();
+  appendCircle().data(gnh.clr["clr_en"]).updateModel(buildPallete().mdlfx("s").cr(100).cx(120))();
+  appendCircle().data(gnh.clr["clr_en"]).selector("encdatas").updateModel(buildPallete().mdlfx("l").cr(100).cx(120).cy(460))();
+  appendCircle().data(gnh.clr["clr_ch"]).selector("chcdatas").updateModel(buildPallete().mdlfx("s").cr(100).cx(360))();
+  return appendCircle().data(gnh.clr["clr_ch"]).selector("chcdatal").updateModel(buildPallete().mdlfx("l").cr(100).cx(360).cy(460))();
 };
 slBatHSLFxs = function(){
-  builPalette().data(gnh.cdata["bat_1"]).selector("bat_1").dtsr(1).updateModel(buildModel().mdlfx("l").cr(80).cx(100))();
-  builPalette().data(gnh.cdata["bat_2"]).selector("bat_2").dtsr(1).updateModel(buildModel().mdlfx("l").cr(80).cx(300))();
-  return builPalette().data(gnh.cdata["bat_3"]).selector("bat_3").dtsr(1).updateModel(buildModel().mdlfx("l").cr(80).cx(500))();
+  appendCircle().data(gnh.clr["bat_1"]).selector("bat_1").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(100))();
+  appendCircle().data(gnh.clr["bat_2"]).selector("bat_2").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(300))();
+  return appendCircle().data(gnh.clr["bat_3"]).selector("bat_3").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(500))();
+};
+slEnBar = function(){
+  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildBar())();
+};
+slEnRect = function(){
+  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildRect())();
 };
 exitslChEnHSLFxs = function(){
   return d3.selectAll(".calldots").transition().duration(1000).attr({
@@ -78,16 +84,12 @@ lsExplain = [
     "enter": slChEnHSLFxs,
     "text": "Comparing the two dataset, you can see that English has a richer entry of color names."
   }, {
-    "exit": exitslChEnHSLFxs,
-    "enter": slBatHSLFxs,
-    "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"
-  }, {
     "exit": function(){},
-    "enter": slChHSLFxS,
+    "enter": slEnBar,
     "text": "A better visualization will be to split the name of the color, words by words. "
   }, {
     "exit": function(){},
-    "enter": slBlank,
+    "enter": slEnRect,
     "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."
   }, {
     "exit": function(){},

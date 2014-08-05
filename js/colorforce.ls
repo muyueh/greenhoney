@@ -5,6 +5,8 @@ buildForce = ->
 	f = {}
 	f.dtsr = 3
 	f.data = []
+	f.size = 800
+	f.margin = 1.5
 
 	build = ->
 
@@ -13,7 +15,7 @@ buildForce = ->
 			.links []
 			.gravity 0
 			.charge 0
-			.size [500, 500]
+			.size [f.size, f.size]
 			.on "tick", tick
 
 		function tick (it)
@@ -49,7 +51,7 @@ buildForce = ->
 					y = it.y - quad.point.y
 					l = Math.sqrt(x * x + y * y) 
 
-					r = 2.5 * f.dtsr
+					r = 2 * f.dtsr + f.margin
 
 					if l < r
 						l = (l - r) / l * 0.5
@@ -75,8 +77,8 @@ buildForce = ->
 
 		force.start!
 
-	["data" "dtsr"].map ->
-		build[it]	:= (v)-> 
+	for let it of f
+		build[it] = (v)-> 
 			f[it] := v
 			build
 
@@ -84,10 +86,10 @@ buildForce = ->
 	build
 
 
-ifNaN = -> if isNaN it then 0 else it
+
 
 go = ->
-	dt = gnh.cdata.clr_en.filter ->
+	dt = gnh.clr.clr_en.filter ->
 		it.target = {}
 		# it.target.x = ifNaN (d3.hsl it.color).s * 5 + 200
 		# it.target.x = ifNaN (d3.hsl it.color).s * 600
@@ -138,7 +140,7 @@ go = ->
 		# it.target.y = (d3.hsl it.color).s * 500
 		true
 
-	# dt = gnh.cdata.clr_en.filter ->
+	# dt = gnh.clr.clr_en.filter ->
 	# 	it.target = {}
 	# 	it.target.x = 100
 	# 	it.target.y = 100
