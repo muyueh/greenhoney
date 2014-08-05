@@ -3,7 +3,7 @@
 gnh = {}
 
 gnh.margin = {top: 10, left: 10, right: 20, bottom: 20}
-gnh.w = 1000 - gnh.margin.left - gnh.margin.right
+gnh.w = 800 - gnh.margin.left - gnh.margin.right
 gnh.h = 800 - gnh.margin.top - gnh.margin.bottom
 
 
@@ -44,7 +44,7 @@ svg = d3.select "body"
 cleanName = (str)-> 
 	str.replace(/,/g, "").replace(/"/g, "").replace(/\./g, "").replace(/'/g, "").replace(/-/g, "").replace(/ /g, "").toLowerCase!
 
-cleanPunc = (str)->  str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "").replace(/\)/g, "").replace(/[1]/g, " ").toLowerCase!
+cleanPunc = (str)->  str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "").replace(/\)/g, "").replace(/&/g, "").replace(/[1]/g, " ").replace(/  /g, " ").trim!.toLowerCase!
 
 
 

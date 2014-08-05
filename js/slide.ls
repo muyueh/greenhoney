@@ -88,15 +88,22 @@ scrolling = ->
 				1		
 
 initiate-data = ->
-	d3.selectAll ".txtholder"
+	txt = d3.selectAll ".txtholder"
 		.selectAll ".description"
 		.data lsExplain
 		.enter!
+
+	txt
 		.append "h4"
 		.attr {
 			"class": "description"
 		}
+		.style {
+			"text-shadow": "2px 2px 1px white"
+		}
 		.html -> it.text
+
+
 
 	d3.selectAll ".idxholder"
 		.selectAll ".idx"

@@ -1,12 +1,13 @@
-var ref$, listsToObj, join, flatten, buildForce, ifNaN, go, move;
-ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten;
+var ref$, listsToObj, join, flatten, isType, buildForce, ifNaN, go, hightlightGroup, move;
+ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten, isType = ref$.isType;
 buildForce = function(){
   var f, build;
   f = {};
   f.dtsr = 3;
   f.data = [];
+  f.grpnm = [];
   build = function(){
-    var force, collide, node;
+    var force, collide, node, groupName;
     force = d3.layout.force().nodes(f.data).links([]).gravity(0).charge(0).size([500, 500]).on("tick", tick);
     function tick(it){
       var k, q, i, n;
@@ -57,7 +58,7 @@ buildForce = function(){
     };
     node = svg.selectAll("circle").data(f.data).enter().append("circle").attr({
       "class": function(it){
-        return it.name + " node";
+        return it.name + " node " + it.group;
       },
       "r": f.dtsr
     }).style({
@@ -77,9 +78,24 @@ buildForce = function(){
         "r": 3
       });
     });
+    groupName = svg.selectAll(".groupName").data(f.grpnm).enter().append("text").attr({
+      "x": function(it){
+        return it.x;
+      },
+      "y": function(it){
+        return it.y;
+      },
+      "class": function(it){
+        return "grpname grp" + it.name;
+      }
+    }).style({
+      "text-anchor": "middle"
+    }).text(function(it){
+      return it.name;
+    });
     return force.start();
   };
-  ["data", "dtsr"].map(function(it){
+  ["data", "dtsr", "grpnm"].map(function(it){
     return build[it] = function(v){
       f[it] = v;
       return build;
@@ -95,25 +111,63 @@ ifNaN = function(it){
   }
 };
 go = function(){
-  var col, dt, a;
+  var col, posX, posY, grpnm, dt, a;
   col = 7;
+  posX = function(it){
+    return (it % (col + 1) + 0.5) * (gnh.w / (col + 1));
+  };
+  posY = function(it){
+    return (~~(it / (col + 1)) + 0.5) * (gnh.w / (col + 1));
+  };
+  grpnm = [];
   dt = flatten(gnh.barclr.clr_en.map(function(it, i){
     var r;
+    grpnm.push({
+      name: it.key,
+      x: posX(i),
+      y: posY(i) + 50
+    });
     r = it.value.map(function(c, j){
       var tmpc, attr;
       tmpc = {};
       for (attr in c) {
         tmpc[attr] = c[attr];
       }
-      tmpc["target"] = {};
-      tmpc["target"].x = (i % (col + 1) + 0.5) * (gnh.w / (col + 1));
-      tmpc["target"].y = (~~(i / (col + 1)) + 0.5) * (gnh.w / (col + 1));
+      tmpc.group = it.key;
+      tmpc.target = {};
+      tmpc.target.x = posX(i);
+      tmpc.target.y = posY(i);
       return tmpc;
     });
     return r;
   }));
-  a = buildForce().data(dt);
+  a = buildForce().data(dt).grpnm(grpnm);
   return a();
+};
+hightlightGroup = function(name){
+  if (isType("String", name)) {
+    d3.selectAll(".node:not(." + name + "), .grpname:not(.grp" + name + ")").transition().style({
+      "opacity": 0.2
+    });
+    return d3.selectAll("." + name + ", .grp" + name).transition().style({
+      "opacity": 1
+    });
+  } else if (isType("Array", name)) {
+    d3.selectAll((".node" + join("", name.map(function(it){
+      return ":not(." + it + ")";
+    }))) + (", .grpname" + join("", name.map(function(it){
+      return ":not(.grp" + it + ")";
+    })))).transition().style({
+      "opacity": 0.2
+    });
+    return d3.selectAll(join(",", name.map(function(it){
+      return "." + it;
+    })) + ", " + join(",", name.map(function(it){
+      return ".grp" + it;
+    }))).transition().style({
+      "opacity": 1
+    });
+  }
 };
 move = function(){
   return svg.transition().duration(1000).attr({

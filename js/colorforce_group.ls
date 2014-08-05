@@ -1,25 +1,20 @@
-{lists-to-obj, join, flatten} = require "prelude-ls"
+{lists-to-obj, join, flatten, is-type} = require "prelude-ls"
+
+
+
 
 buildForce = ->
 
 	f = {}
 	f.dtsr = 3
 	f.data = []
-	# f.link = [
-	# 	{source: 0, target: 1}
-	# 	{source: 0, target: 2}
-	# 	{source: 0, target: 3}
-	# 	{source: 0, target: 4}
-	# 	{source: 0, target: 5}
-	# 	{source: 0, target: 6}
-	# ]
+	f.grpnm = []
 
 	build = ->
 
 		force = d3.layout.force!
 			.nodes f.data
 			.links []
-			# f.link
 			.gravity 0
 			.charge 0
 			.size [500, 500]
@@ -45,13 +40,6 @@ buildForce = ->
 					"cy": -> it.y
 				}
 
-			# link
-			# 	.attr {
-			# 		"x1" : -> it.source.x
-			# 		"y1" : -> it.source.y
-			# 		"x2" : -> it.target.x
-			# 		"y2" : -> it.target.y
-			# 	}
 
 		collide = ->
 			r = f.dtsr
@@ -82,7 +70,7 @@ buildForce = ->
 			.enter!
 			.append "circle"
 			.attr {
-				"class": -> it.name + " node"
+				"class": -> it.name + " node " + it.group
 				"r": f.dtsr
 			}
 			.style {
@@ -105,24 +93,24 @@ buildForce = ->
 						"r": 3
 					}
 
+		groupName = svg.selectAll ".groupName"
+			.data f.grpnm
+			.enter!
+			.append "text"
+			.attr {
+				"x": -> it.x
+				"y": -> it.y
+				"class": -> "grpname grp" + it.name
+			}
+			.style {
+				"text-anchor": "middle"
+			}
+			.text -> it.name
 
-		# link = svg.selectAll "line"
-		# 	.data f.link
-		# 	.enter!
-		# 	.append "line"
-		# 	.attr {
-		# 		"x1" : -> it.source.x
-		# 		"y1" : -> it.source.y
-		# 		"x2" : -> it.target.x
-		# 		"y2" : -> it.target.y
-		# 	}
-		# 	.style {
-		# 		"stroke": "red"
-		# 	}
 
 		force.start!
 
-	["data" "dtsr"].map ->
+	["data" "dtsr" "grpnm"].map ->
 		build[it]	:= (v)->  
 			f[it] := v
 			build
@@ -134,35 +122,64 @@ buildForce = ->
 ifNaN = -> if isNaN it then 0 else it
 
 go = ->
-	# dt = (flatten (gnh.barclr.clr_en.map -> it.value)).filter ->
+
 	col = 7
+	posX = -> (it % (col + 1) + 0.5) * (gnh.w / (col + 1))
+	posY = -> (~~(it / (col + 1)) + 0.5) * (gnh.w / (col + 1))
+
+	grpnm = []
 	dt = flatten(gnh.barclr.clr_en.map (it, i)-> 
+			grpnm.push {
+				name: it.key
+				x: (posX i)
+				y: (posY i) + 50
+			}
+
 			r = it.value.map (c, j)->
-				# console.log c
 				tmpc = {}
 	
 				for attr of c
 					tmpc[attr]	= c[attr]
 				
-				tmpc["target"] = {}
-				tmpc["target"].x = (i % (col + 1) + 0.5) * (gnh.w / (col + 1))
-				tmpc["target"].y = (~~(i / (col + 1)) + 0.5) * (gnh.w / (col + 1))
+				tmpc.group = it.key
+				tmpc.target = {}
+				tmpc.target.x = posX i
+				tmpc.target.y = posY i
 	
 				tmpc
 	
 			r)
 
-	# dt.filter ->
 
-	# 	# it.target = {}
-	# 	# it.target.x = ifNaN (d3.hsl it.color).l * 600
-	# 	# it.target.y = ifNaN (d3.hsl it.color).h
-
-
-	# 	true
-
-	a = buildForce!.data dt
+	a = buildForce!.data dt .grpnm grpnm
 	a!
+
+hightlightGroup = (name)->
+	if is-type "String" name
+		d3.selectAll ".node:not(." + name + "), .grpname:not(.grp" + name + ")"
+			.transition!
+			.style {
+				"opacity": 0.2
+			}
+
+		d3.selectAll "." + name + ", .grp" + name
+			.transition!
+			.style {
+				"opacity": 1
+			}
+
+	else if is-type "Array" name
+		d3.selectAll (".node" + join "" (name.map -> ":not(." + it + ")")) + (", .grpname" + (join "" (name.map -> ":not(.grp" + it + ")")))
+			.transition!
+			.style {
+				"opacity": 0.2
+			}
+
+		d3.selectAll (join "," (name.map -> "." + it)) + ", " + (join "," (name.map -> ".grp" + it))
+			.transition!
+			.style {
+				"opacity": 1
+			}
 
 move = ->
 	svg

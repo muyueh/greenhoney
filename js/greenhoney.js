@@ -7,7 +7,7 @@ gnh.margin = {
   right: 20,
   bottom: 20
 };
-gnh.w = 1000 - gnh.margin.left - gnh.margin.right;
+gnh.w = 800 - gnh.margin.left - gnh.margin.right;
 gnh.h = 800 - gnh.margin.top - gnh.margin.bottom;
 gnh.lsfl = ["clr_en", "clr_ch", "clr_fr", "bat_1", "bat_2", "bat_3"];
 gnh.cdata = {};
@@ -23,7 +23,7 @@ cleanName = function(str){
   return str.replace(/,/g, "").replace(/"/g, "").replace(/\./g, "").replace(/'/g, "").replace(/-/g, "").replace(/ /g, "").toLowerCase();
 };
 cleanPunc = function(str){
-  return str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "").replace(/\)/g, "").replace(/[1]/g, " ").toLowerCase();
+  return str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "").replace(/\)/g, "").replace(/&/g, "").replace(/[1]/g, " ").replace(/  /g, " ").trim().toLowerCase();
 };
 buildModel = function(){
   var m, build;

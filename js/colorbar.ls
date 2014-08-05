@@ -60,9 +60,6 @@ buildBar = ->
 				"color": c.color
 			}
 
-	console.log JSON.stringify flatten data
-
-
 	svg
 	.selectAll "." + b.selector
 		.data flatten data

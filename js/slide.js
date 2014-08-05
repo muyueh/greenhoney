@@ -155,8 +155,12 @@ scrolling = function(){
   });
 };
 initiateData = function(){
-  d3.selectAll(".txtholder").selectAll(".description").data(lsExplain).enter().append("h4").attr({
+  var txt;
+  txt = d3.selectAll(".txtholder").selectAll(".description").data(lsExplain).enter();
+  txt.append("h4").attr({
     "class": "description"
+  }).style({
+    "text-shadow": "2px 2px 1px white"
   }).html(function(it){
     return it.text;
   });
