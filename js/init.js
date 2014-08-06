@@ -1,5 +1,5 @@
-var listsToObj, gnh, svg, cleanName, cleanPunc, ifNaN, b, clone, countColor, initBar, appendCircle;
-listsToObj = require("prelude-ls").listsToObj;
+var ref$, listsToObj, join, gnh, svg, cleanName, cleanPunc, ifNaN, clone, countColor, initBar, appendCircle;
+ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join;
 gnh = {};
 gnh.margin = {
   top: 10,
@@ -7,8 +7,8 @@ gnh.margin = {
   right: 20,
   bottom: 20
 };
-gnh.w = 900 - gnh.margin.left - gnh.margin.right;
-gnh.h = 800 - gnh.margin.top - gnh.margin.bottom;
+gnh.w = 1000 - gnh.margin.left - gnh.margin.right;
+gnh.h = 850 - gnh.margin.top - gnh.margin.bottom;
 gnh.lsfl = ["clr_en", "clr_ch", "clr_fr", "bat_1", "bat_2", "bat_3"];
 gnh.clr = {};
 gnh.allclrls = {};
@@ -32,10 +32,6 @@ ifNaN = function(it){
     return it;
   }
 };
-b = {};
-b.data = gnh.grpclr["clr_en"];
-b.selector = "encdatas";
-b.dtsr = 3;
 clone = function(obj){
   return JSON.parse(JSON.stringify(obj));
 };
@@ -63,6 +59,7 @@ countColor = function(list, splitFunc){
       cclr.grpidx = grpidx;
       cclr.ingrpidx = ingrpidx;
       cclr.ttlidx = ++ttlidx;
+      cclr.primclr = grp.key;
       return cclr;
     });
   }));
@@ -102,17 +99,23 @@ appendCircle = function(){
   m.data = [];
   m.updateModel = function(){};
   m.dtsr = 3;
+  m.lightload = false;
   build = function(){
     var c;
-    console.log(m.data);
-    c = svg.selectAll("." + m.selector).data(m.data);
+    if (m.lightload) {
+      c = svg.selectAll("." + m.selector).data(m.data, function(it){
+        return cleanName(it.color);
+      });
+    } else {
+      c = svg.selectAll("." + m.selector).data(m.data);
+    }
     c.transition().duration(1200).call(m.updateModel);
     c.enter().append("circle").attr({
       "fill": function(it, i){
         return it.color;
       },
       "class": function(it, i){
-        return "calldots c" + cleanName(it.color) + " " + m.selector;
+        return "calldots c" + cleanName(it.color) + " " + m.selector + " " + join(" cgr", it.grp) + " prm" + it.primclr;
       },
       "r": 0
     }).transition().duration(1200).attr({

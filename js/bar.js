@@ -4,14 +4,17 @@ buildBar = function(){
   var m, build, i$;
   m = {};
   m.dtsr = 3;
-  m.margin = 0.5;
+  m.margin = 1;
   build = function(it){
-    return it.attr({
-      "cx": function(it, i){
-        return it.ingrpidx * 2 * (m.dtsr + m.margin);
+    return it.each(function(it, i){
+      it.x = it.ingrpidx * 2 * (m.dtsr + m.margin);
+      return it.y = it.grpidx * 2 * (m.dtsr + m.margin);
+    }).attr({
+      "cx": function(it){
+        return it.x;
       },
-      "cy": function(it, i){
-        return it.grpidx * 2 * (m.dtsr + m.margin);
+      "cy": function(it){
+        return it.y;
       }
     });
   };
@@ -30,15 +33,18 @@ buildRect = function(){
   var m, build, i$;
   m = {};
   m.dtsr = 3;
-  m.margin = 0.5;
+  m.margin = 1;
   m.rectWidth = 50;
   build = function(it){
-    return it.attr({
-      "cx": function(it, i){
-        return (it.ttlidx % m.rectWidth) * 2 * (m.dtsr + m.margin);
+    return it.each(function(it, i){
+      it.x = (it.ttlidx % m.rectWidth) * 2 * (m.dtsr + m.margin);
+      return it.y = ~~(it.ttlidx / m.rectWidth) * 2 * (m.dtsr + m.margin);
+    }).attr({
+      "cx": function(it){
+        return it.x;
       },
-      "cy": function(it, i){
-        return ~~(it.ttlidx / m.rectWidth) * 2 * (m.dtsr + m.margin);
+      "cy": function(it){
+        return it.y;
       }
     });
   };

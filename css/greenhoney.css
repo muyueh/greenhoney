@@ -2,7 +2,7 @@
   position: relative;
   left: 600px;
   top: 150px;
-  width: 350px;
+  width: 400px;
 }
 .idx {
   width: 10px;
@@ -13,14 +13,21 @@
 }
 .idxholder {
   position: fixed;
-  left: 950px;
+  left: 1000px;
   top: 220px;
 }
 .description {
   height: 500px;
-  width: 300px;
+  width: 350px;
   font-family: 'PT Serif', serif;
+}
+.descriptionH4 {
+  background-color: #fff;
 }
 .svgholder {
   position: fixed;
+}
+svg text {
+  font-family: Helvatica, sans-serif;
+  font-weight: 100;
 }

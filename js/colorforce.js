@@ -1,4 +1,4 @@
-var listsToObj, buildForce, go;
+var listsToObj, buildForce;
 listsToObj = require("prelude-ls").listsToObj;
 buildForce = function(){
   var f, build, i$;
@@ -7,8 +7,16 @@ buildForce = function(){
   f.data = [];
   f.size = 800;
   f.margin = 1.5;
+  f.targetFunc = function(it){
+    it.target = {};
+    it.target.x = 300;
+    it.target.y = 300;
+    return true;
+  };
   build = function(){
     var force, collide, node;
+    f.data = f.data.filter(f.targetFunc);
+    console.log(f.data.filter(f.targetFunc));
     force = d3.layout.force().nodes(f.data).links([]).gravity(0).charge(0).size([f.size, f.size]).on("tick", tick);
     function tick(it){
       var k, q, i, n;
@@ -77,15 +85,4 @@ buildForce = function(){
       return build;
     };
   }
-};
-go = function(){
-  var dt, a;
-  dt = gnh.clr.clr_en.filter(function(it){
-    it.target = {};
-    it.target.x = ifNaN(d3.hsl(it.color).l * 600);
-    it.target.y = ifNaN(d3.hsl(it.color).h);
-    return true;
-  });
-  a = buildForce().data(dt);
-  return a();
 };

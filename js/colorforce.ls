@@ -7,8 +7,20 @@ buildForce = ->
 	f.data = []
 	f.size = 800
 	f.margin = 1.5
+	f.targetFunc = ->
+		it.target = {}
+		it.target.x = 300
+		it.target.y = 300
+
+		true
+
+	# console.log "hi"
 
 	build = ->
+
+		f.data := f.data.filter f.targetFunc
+
+		console.log f.data.filter f.targetFunc
 
 		force = d3.layout.force!
 			.nodes f.data
@@ -88,63 +100,63 @@ buildForce = ->
 
 
 
-go = ->
-	dt = gnh.clr.clr_en.filter ->
-		it.target = {}
-		# it.target.x = ifNaN (d3.hsl it.color).s * 5 + 200
-		# it.target.x = ifNaN (d3.hsl it.color).s * 600
+# go = ->
+# 	dt = gnh.clr.clr_en.filter ->
+# 		it.target = {}
+# 		# it.target.x = ifNaN (d3.hsl it.color).s * 5 + 200
+# 		# it.target.x = ifNaN (d3.hsl it.color).s * 600
 
-		# it.target.x = ifNaN (d3.hcl it.color).l * 10
+# 		# it.target.x = ifNaN (d3.hcl it.color).l * 10
 
-		# it.target.x = ifNaN (d3.hsl it.color).h
-		# it.target.y = ifNaN (d3.hsl it.color).s * 600
+# 		# it.target.x = ifNaN (d3.hsl it.color).h
+# 		# it.target.y = ifNaN (d3.hsl it.color).s * 600
 
-		# it.target.x = ifNaN (d3.hsl it.color).l * 600
-		# it.target.y = ifNaN (d3.hsl it.color).s * 600
+# 		# it.target.x = ifNaN (d3.hsl it.color).l * 600
+# 		# it.target.y = ifNaN (d3.hsl it.color).s * 600
 
-		it.target.x = ifNaN (d3.hsl it.color).l * 600
-		it.target.y = ifNaN (d3.hsl it.color).h
+# 		it.target.x = ifNaN (d3.hsl it.color).l * 600
+# 		it.target.y = ifNaN (d3.hsl it.color).h
 
-		# it.target.x = ifNaN (d3.hsl it.color).l * 600
-		# it.target.y = ifNaN (d3.hsl it.color).s * 600
+# 		# it.target.x = ifNaN (d3.hsl it.color).l * 600
+# 		# it.target.y = ifNaN (d3.hsl it.color).s * 600
 
-		# it.target.x = ifNaN (d3.hsl it.color).l * 600
-		# it.target.y = 100
-			# 
+# 		# it.target.x = ifNaN (d3.hsl it.color).l * 600
+# 		# it.target.y = 100
+# 			# 
 
-		# it.target.x = 0
-		# it.target.y = 0
+# 		# it.target.x = 0
+# 		# it.target.y = 0
 	
 
-		# clr = d3.hsl it.color
-		# it.target.x = 250 + Math.cos((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
-		# it.target.y = 250 + Math.sin((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
+# 		# clr = d3.hsl it.color
+# 		# it.target.x = 250 + Math.cos((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
+# 		# it.target.y = 250 + Math.sin((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
 
-		# clr = d3.rgb it.color
-		# it.target.x = clr.g * 1 + 50
-		# it.target.y = clr.b * 1 + 50
-		# 100
-
-
-		# it.target.x = (ifNaN (d3.lab it.color).a + 100) * 2
-		# it.target.y = (ifNaN (d3.lab it.color).b + 100) * 2
+# 		# clr = d3.rgb it.color
+# 		# it.target.x = clr.g * 1 + 50
+# 		# it.target.y = clr.b * 1 + 50
+# 		# 100
 
 
-		# it.target.x = ifNaN (d3.hsl it.color).s * 400
-		# 	# 100
-		# it.target.y = ifNaN (d3.hsl it.color).h * 1.5
-		# it.target.y = (d3.rgb it.color).r * 2 + 200
-		# it.target.x = 100
-		# 	# (d3.hsl it.color).l * 500
-		# 	# 100
-		# it.target.y = (d3.hsl it.color).s * 500
-		true
+# 		# it.target.x = (ifNaN (d3.lab it.color).a + 100) * 2
+# 		# it.target.y = (ifNaN (d3.lab it.color).b + 100) * 2
 
-	# dt = gnh.clr.clr_en.filter ->
-	# 	it.target = {}
-	# 	it.target.x = 100
-	# 	it.target.y = 100
-	# 	true
 
-	a = buildForce!.data dt
-	a!
+# 		# it.target.x = ifNaN (d3.hsl it.color).s * 400
+# 		# 	# 100
+# 		# it.target.y = ifNaN (d3.hsl it.color).h * 1.5
+# 		# it.target.y = (d3.rgb it.color).r * 2 + 200
+# 		# it.target.x = 100
+# 		# 	# (d3.hsl it.color).l * 500
+# 		# 	# 100
+# 		# it.target.y = (d3.hsl it.color).s * 500
+# 		true
+
+# 	# dt = gnh.clr.clr_en.filter ->
+# 	# 	it.target = {}
+# 	# 	it.target.x = 100
+# 	# 	it.target.y = 100
+# 	# 	true
+
+# 	a = buildForce!.data dt
+# 	a!

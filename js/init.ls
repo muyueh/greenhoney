@@ -1,10 +1,10 @@
-{lists-to-obj} = require "prelude-ls"
+{lists-to-obj, join} = require "prelude-ls"
 
 gnh = {}
 
 gnh.margin = {top: 10, left: 10, right: 20, bottom: 20}
-gnh.w = 900 - gnh.margin.left - gnh.margin.right
-gnh.h = 800 - gnh.margin.top - gnh.margin.bottom
+gnh.w = 1000 - gnh.margin.left - gnh.margin.right
+gnh.h = 850 - gnh.margin.top - gnh.margin.bottom
 
 
 gnh.lsfl = ["clr_en" "clr_ch" "clr_fr" "bat_1" "bat_2" "bat_3"]
@@ -47,12 +47,6 @@ cleanPunc = (str)->  str.replace(/-/g, " ").replace(/\//g, " ").replace(/\(/g, "
 ifNaN = -> if isNaN it then 0 else it
 
 
-# TOBEREMOVED
-b = {}
-b.data = gnh.grpclr["clr_en"] # []
-b.selector = "encdatas"
-b.dtsr = 3
-
 
 clone = (obj)->
 	JSON.parse JSON.stringify obj
@@ -86,21 +80,9 @@ countColor = (list, splitFunc)->
 			cclr.grpidx = grpidx
 			cclr.ingrpidx = ingrpidx
 			cclr.ttlidx = ++ttlidx
+			cclr.primclr = grp.key
 
 			return cclr
-
-	# tmpObj = {
-	# 	"name": null
-	# }
-
-	# list
-	# 	.sort (a, b)-> a.name - b.name
-	# 	.map (it, i)->
-	# 		if it.name is tmpObj.name
-	# 			console.log tmpObj
-	# 			console.log it
-	# 		else
-	# 			tmpObj := clone it
 
 	return {
 		"clr": list
@@ -123,10 +105,6 @@ initBar = ->
 		["grpclr", "clr"].map (attr)->
 			gnh[attr][fl.name] := rslt[attr]
 
-	# b.data := gnh.grpclr["clr_en"]
-	#TOBEREMOVED
-
-
 
 appendCircle = ->
 	m = {}
@@ -134,13 +112,19 @@ appendCircle = ->
 	m.data = []
 	m.updateModel = (->)
 	m.dtsr = 3
+	m.lightload = false
 
 	build = ->
-
-		console.log m.data
-		c = svg
-			.selectAll "." + m.selector
-			.data m.data # , -> (cleanName it.color)
+		# console.log m.data
+		if m.lightload
+			c = svg
+				.selectAll "." + m.selector
+				.data m.data , -> (cleanName it.color) # remove duplicate
+		else 
+			c = svg
+				.selectAll "." + m.selector
+				.data m.data
+				
 ## If use this to specify, will remove duplicate circle
 		c
 			.transition!
@@ -152,7 +136,7 @@ appendCircle = ->
 			.append "circle"
 			.attr {
 				"fill": (it, i)-> it.color
-				"class": (it, i)-> "calldots c" + (cleanName it.color) + " " + m.selector
+				"class": (it, i)-> "calldots c" + (cleanName it.color) + " " + m.selector + " " + (join " cgr", it.grp) + " prm" + it.primclr
 				"r": 0
 			}
 			.transition!

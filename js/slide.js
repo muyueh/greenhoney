@@ -1,4 +1,4 @@
-var sld, updtBlackIdxDots, slBlank, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, slEnBar, slEnRect, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData, setupslide;
+var sld, updtBlackIdxDots, slBlank, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, slEnBar, slEnRect, slChForce, slEnForce, slHighEnTop, slHighEnBase, slHighEnObj, slHighEnFlower, slHighEnAdj, slHighEnGeo, slHighEnIdea, exitForce, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData, setupslide;
 sld = {};
 sld.screenh = $(window).height();
 sld.hghidx = -1;
@@ -30,9 +30,22 @@ slEnHSLFxS = function(){
 };
 slChEnHSLFxs = function(){
   appendCircle().data(gnh.clr["clr_en"]).updateModel(buildPallete().mdlfx("s").cr(100).cx(120))();
-  appendCircle().data(gnh.clr["clr_en"]).selector("encdatas").updateModel(buildPallete().mdlfx("l").cr(100).cx(120).cy(460))();
-  appendCircle().data(gnh.clr["clr_ch"]).selector("chcdatas").updateModel(buildPallete().mdlfx("s").cr(100).cx(360))();
-  return appendCircle().data(gnh.clr["clr_ch"]).selector("chcdatal").updateModel(buildPallete().mdlfx("l").cr(100).cx(360).cy(460))();
+  appendCircle().lightload(true).data(gnh.clr["clr_en"]).selector("encdatas").updateModel(buildPallete().mdlfx("l").cr(100).cx(120).cy(460))();
+  appendCircle().lightload(true).data(gnh.clr["clr_ch"]).selector("chcdatas").updateModel(buildPallete().mdlfx("s").cr(100).cx(360))();
+  appendCircle().lightload(true).data(gnh.clr["clr_ch"]).selector("chcdatal").updateModel(buildPallete().mdlfx("l").cr(100).cx(360).cy(460))();
+  return svg.selectAll("text").data(["English", "Chinese"]).enter().append("text").attr({
+    "y": 370,
+    "x": function(it, i){
+      if (i === 0) {
+        return 100;
+      } else {
+        return 330;
+      }
+    },
+    "class": "clrtitle"
+  }).text(function(it){
+    return it;
+  });
 };
 slBatHSLFxs = function(){
   appendCircle().data(gnh.clr["bat_1"]).selector("bat_1").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(100))();
@@ -40,15 +53,53 @@ slBatHSLFxs = function(){
   return appendCircle().data(gnh.clr["bat_3"]).selector("bat_3").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(500))();
 };
 slEnBar = function(){
-  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildBar())();
+  return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildBar())();
 };
 slEnRect = function(){
-  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildRect())();
+  return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildRect())();
+};
+slChForce = function(){
+  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildForce().data(gnh.clr["clr_ch"]).grpnm(gnh.grpclr["clr_en"].map(function(it){
+    return it.key;
+  })))();
+};
+slEnForce = function(){
+  return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildForce().data(gnh.clr["clr_en"]).grpnm(gnh.grpclr["clr_en"].map(function(it){
+    return it.key;
+  })))();
+};
+slHighEnTop = function(){
+  return hightlightGroup(["blue", "green", "pink"]);
+};
+slHighEnBase = function(){
+  return hightlightGroup(["blue", "green", "pink", "red", "yellow", "orange", "magenta", "purple", "gray", "black", "white", "cerulean", "maroon", "khaki", "cyan"]);
+};
+slHighEnObj = function(){
+  return hightlightGroup(["cooper", "candy", "sky", "taupe", "carmine", "gold", "crimson", "crayola", "silver", "turquoise", "liver", "slate", "royal", "ruby", "puce", "coral", "sea", "salmon"]);
+};
+slHighEnFlower = function(){
+  return hightlightGroup(["rose", "lavender", "violet", "fuchsia", "orchid", "indigo", "lime", "lemon", "raspberry", "peach", "mauve", "apple", "tangerine", "olive", "moss", "cerise", "lilac", "chestnut", "bud"]);
+};
+slHighEnAdj = function(){
+  return hightlightGroup(["dark", "light", "deep", "medium", "pale", "rich", "bright", "old", "rich", "grey", "vivid", "golden", "antique"]);
+};
+slHighEnGeo = function(){
+  return hightlightGroup(["french", "spanish", "persian", "tuscan", "english"]);
+};
+slHighEnIdea = function(){
+  return hightlightGroup(["electric", "x", "mensell", "pastel", "html", "web", "pantone", "ryb"]);
+};
+exitForce = function(){
+  gnh.force.stop();
+  return d3.selectAll(".grpname").transition().style({
+    "opacity": 0
+  }).remove();
 };
 exitslChEnHSLFxs = function(){
-  return d3.selectAll(".calldots").transition().duration(1000).attr({
+  d3.selectAll(".calldots").transition().duration(1000).attr({
     "r": 0
   }).remove();
+  return svg.selectAll(".clrtitle").remove();
 };
 lsExplain = [
   {
@@ -74,15 +125,19 @@ lsExplain = [
   }, {
     "exit": function(){},
     "enter": slEnHSLFxL,
-    "text": "Here is the English Dataset (Keeping Lightness as constant)."
+    "text": "Here is the English Dataset, keeping Lightness as constant. "
   }, {
     "exit": function(){},
     "enter": slEnHSLFxS,
-    "text": "(Keeping Saturation as constant)."
+    "text": "Keeping Saturation as constant."
   }, {
     "exit": exitslChEnHSLFxs,
     "enter": slChEnHSLFxs,
     "text": "Comparing the two dataset, you can see that English has a richer entry of color names."
+  }, {
+    "exit": exitStruct,
+    "enter": enterStruct,
+    "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."
   }, {
     "exit": function(){},
     "enter": slEnBar,
@@ -92,8 +147,8 @@ lsExplain = [
     "enter": slEnRect,
     "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."
   }, {
-    "exit": function(){},
-    "enter": slBlank,
+    "exit": exitForce,
+    "enter": slEnForce,
     "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective. "
   }, {
     "exit": function(){},
@@ -104,30 +159,46 @@ lsExplain = [
     "enter": slBlank,
     "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."
   }, {
+    "exit": exitForce,
+    "enter": slEnForce,
+    "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."
+  }, {
+    "exit": exitForce,
+    "enter": slHighEnTop,
+    "text": "In English, the top three colors are Blue, Green and  Pink."
+  }, {
     "exit": function(){},
-    "enter": slBlank,
-    "text": "How let's see English. Remember that in Chinese the top three color is Red-Blue-Green.</br></br> In English, the top three colors are Blue, Green, Pink and Red."
+    "enter": slHighEnBase,
+    "text": "You can also notice the same characteritics of using base color, "
+  }, {
+    "exit": function(){},
+    "enter": slHighEnObj,
+    "text": "association from object"
+  }, {
+    "exit": function(){},
+    "enter": slHighEnFlower,
+    "text": "from flowers and fruits"
+  }, {
+    "exit": function(){},
+    "enter": slHighEnAdj,
+    "text": "and with adjective."
+  }, {
+    "exit": function(){},
+    "enter": slHighEnGeo,
+    "text": "But some interesting naming convention in English, is using geolocation, "
+  }, {
+    "exit": function(){},
+    "enter": slHighEnIdea,
+    "text": "and concept. "
   }, {
     "exit": function(){},
     "enter": slBlank,
-    "text": "You can also notice the same attribute of using object name and adjective."
-  }, {
-    "exit": function(){},
-    "enter": slBlank,
-    "text": "But one interesting naming convention in English, is that we use location name, such as French, Persian, Turkish and English. "
-  }, {
-    "exit": function(){},
-    "enter": slBlank,
-    "text": "This process really represents some main ideas I have on visualization: the process of building visualization is to keep testing different model on our dataset, different models reveals the different part of this dataset."
-  }, {
-    "exit": function(){},
-    "enter": slBlank,
-    "text": "Most importantly, this process makes you understand your data. There is a thinking that goes like this: we can throw some conclusions to our designers, and they will be able to prettify the output. </br></br> However, the only way you can tell interesting story, it's when you really know your data, learn something new from it, and share then you can share it with others."
+    "text": "This process represents some concepts that I believe in visualization: keep testing different model, and learn something new on your dataset. </br></br> There is a thinking that treats visualization as a magical process that prettifies the output. Yet the only way we can make meaningfull graph is when we discover something meaningfull during our research.</br></br> People are relying on us to see the world. Out of everyone, we are the one who needs to have these interesting tests/ models/ questions/ hypothesis at hands, because if we don't know the color 'red', our story will never have'red' in it. </br></br></br>By Muyueh Lee, </br>adapted from his talk \"Green Honey\" @#OpenDataWorkshop2013."
   }
 ];
 ticking = function(i){
   if (i !== sld.hghidx) {
-    if (lsExplain[sld.hghidx] !== undefined) {
+    if (sld.hghidx !== -1) {
       lsExplain[sld.hghidx].exit();
     }
     sld.hghidx = i;
@@ -159,10 +230,10 @@ scrolling = function(){
 initiateData = function(){
   var txt;
   txt = d3.selectAll(".txtholder").selectAll(".description").data(lsExplain).enter();
-  txt.append("h4").attr({
+  txt.append("div").attr({
     "class": "description"
-  }).style({
-    "text-shadow": "2px 2px 1px white"
+  }).append("h4").attr({
+    "class": "descriptionH4"
   }).html(function(it){
     return it.text;
   });
