@@ -16,7 +16,6 @@ buildForce = function(){
   build = function(){
     var force, collide, node;
     f.data = f.data.filter(f.targetFunc);
-    console.log(f.data.filter(f.targetFunc));
     force = d3.layout.force().nodes(f.data).links([]).gravity(0).charge(0).size([f.size, f.size]).on("tick", tick);
     function tick(it){
       var k, q, i, n;

@@ -1,6 +1,50 @@
 {lists-to-obj, join, flatten, is-type, take} = require "prelude-ls"
 
 gnh.force = null
+
+targetCenter = ->
+	it.target = {}
+	it.target.x = 400
+	it.target.y = 400
+	true
+
+targetHSHS = ->
+	clr = d3.hsl it.color
+	it.target.x = ifNaN clr.h
+	it.target.y = ifNaN clr.s * 600
+
+targetHSLS = ->
+	clr = d3.hsl it.color
+	it.target.x = ifNaN clr.l * 600
+	it.target.y = ifNaN clr.s * 600
+
+targetRGB = ->
+	clr = d3.rgb it.color
+	it.target.x = clr.g * 1 + 50
+	it.target.y = clr.b * 1 + 50
+
+
+targetHSLL = ->
+	clr = d3.hsl it.color
+	# it.target.x = ifNaN clr.l * 600
+	# it.target.y = ifNaN clr.s * 600
+
+targetHCLL = ->
+	# clr = d3.hsl it.color
+	# it.target.x = ifNaN clr.l * 600
+	# it.target.y = ifNaN clr.s * 600
+
+targetHCLC = ->
+	# clr = d3.hsl it.color
+	# it.target.x = ifNaN clr.l * 600
+	# it.target.y = ifNaN clr.s * 600
+
+targetRGB = ->
+	# clr = d3.hsl it.color
+	# it.target.x = ifNaN clr.l * 600
+	# it.target.y = ifNaN clr.s * 600
+
+
 	
 buildForce = ->
 
@@ -129,26 +173,22 @@ hightlightGroup = (name, selector)->
 	selector = selector or ".cdots"
 	if is-type "String" name
 		d3.selectAll "." + selector + ":not(.prm" + name + "), .grp" + selector +  ":not(.grp" + name + ")"
-			.transition!
 			.style {
 				"opacity": 0.2
 			}
 
 		d3.selectAll ".prm" + name + ", .grp" + name
-			.transition!
 			.style {
 				"opacity": 1
 			}
 
 	else if is-type "Array" name
 		d3.selectAll ("." + selector + join "" (name.map -> ":not(.prm" + it + ")")) + (",.grp" + selector + (join "" (name.map -> ":not(.grp" + it + ")")))
-			.transition!
 			.style {
 				"opacity": 0.2
 			}
 
 		d3.selectAll (join "," (name.map -> ".prm" + it)) + ", " + (join "," (name.map -> ".grp" + it))
-			.transition!
 			.style {
 				"opacity": 1
 			}

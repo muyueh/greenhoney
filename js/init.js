@@ -109,7 +109,9 @@ appendCircle = function(){
     } else {
       c = svg.selectAll("." + m.selector).data(m.data);
     }
-    c.transition().duration(1200).call(m.updateModel);
+    c.transition().duration(1200).attr({
+      "r": m.dtsr
+    }).call(m.updateModel);
     c.enter().append("circle").attr({
       "fill": function(it, i){
         return it.color;

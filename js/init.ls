@@ -124,11 +124,14 @@ appendCircle = ->
 			c = svg
 				.selectAll "." + m.selector
 				.data m.data
+				# , -> it.primclr + (cleanName it.color)
 				
-## If use this to specify, will remove duplicate circle
 		c
 			.transition!
 			.duration 1200
+			.attr {
+				"r": m.dtsr	
+			}
 			.call m.updateModel
 
 		c

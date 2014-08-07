@@ -3,6 +3,7 @@
 # Idea spereration of concern; build this as a function; and feeed data inside; now we are still relying on global var to send data.
 
 # munsell color system
+# font problem
 sld = {}
 sld.screenh = $ window .height!
 sld.hghidx = -1
@@ -13,19 +14,19 @@ updtBlackIdxDots = ->
 			"background-color": (it, i)-> if i is sld.hghidx then "black" else "white"
 		}
 
-slBlank = -> console.log "do nothing"
+slBk = -> console.log "do nothing"
 
 
 slChHSLFxS = -> 
 	do(appendCircle! .data gnh.clr["clr_ch"] .updateModel buildPallete!)
-slChHSLFxL = -> do(appendCircle! .data gnh.clr["clr_ch"] .updateModel buildPallete!.mdlfx "l" )
-slEnHSLFxL = -> do(appendCircle! .data gnh.clr["clr_en"] .updateModel buildPallete!.mdlfx "l" )
-slEnHSLFxS = -> do(appendCircle! .data gnh.clr["clr_en"] .updateModel buildPallete!.mdlfx "s" )
+slChHSLFxL = -> do(appendCircle!.lightload true .data gnh.clr["clr_ch"] .updateModel buildPallete!.mdlfx "l" )
+slEnHSLFxL = -> do(appendCircle!.lightload true .data gnh.clr["clr_en"] .updateModel buildPallete!.mdlfx "l" )
+slEnHSLFxS = -> do(appendCircle!.lightload true .data gnh.clr["clr_en"] .updateModel buildPallete!.mdlfx "s" )
 slChEnHSLFxs = ->
-	do(appendCircle! .data gnh.clr["clr_en"] .updateModel (buildPallete!.mdlfx("s").cr(100).cx(120)))
-	do(appendCircle! .lightload true .data gnh.clr["clr_en"] .selector "encdatas" .updateModel (buildPallete!.mdlfx("l").cr(100).cx(120).cy(460)))
-	do(appendCircle! .lightload true .data gnh.clr["clr_ch"] .selector "chcdatas" .updateModel (buildPallete!.mdlfx("s").cr(100).cx(360)))
-	do(appendCircle! .lightload true .data gnh.clr["clr_ch"] .selector "chcdatal" .updateModel (buildPallete!.mdlfx("l").cr(100).cx(360).cy(460)))
+	do(appendCircle!.lightload true .data gnh.clr["clr_en"] .updateModel (buildPallete!.mdlfx("s").cr(100).cx(120)))
+	do(appendCircle!.lightload true .data gnh.clr["clr_en"] .selector "encdatas" .updateModel (buildPallete!.mdlfx("l").cr(100).cx(120).cy(460)))
+	do(appendCircle!.lightload true .data gnh.clr["clr_ch"] .selector "chcdatas" .updateModel (buildPallete!.mdlfx("s").cr(100).cx(360)))
+	do(appendCircle!.lightload true .data gnh.clr["clr_ch"] .selector "chcdatal" .updateModel (buildPallete!.mdlfx("l").cr(100).cx(360).cy(460)))
 
 	svg
 		.selectAll "text"
@@ -88,29 +89,24 @@ slHighEnIdea = ->
 	hightlightGroup ["electric" "x" "mensell" "pastel" "html" "web" "pantone" "ryb"], "enforce"
 
 
-# exitForce = ->
-# 	gnh.force.stop!
-
-# 	d3.selectAll ".grpchforce"
-# 		.transition!
-# 		.style {
-# 			"opacity": 0
-# 		}
-# 		.remove!
-
-exitChForce = ->
+exitForce = ->
 	gnh.force.stop!
 
-	d3.selectAll ".grpchforce"
+	d3.selectAll ".grp" + it
 		.transition!
 		.style {
 			"opacity": 0
 		}
 		.remove!
 
-	d3.selectAll ".chforce"
+	d3.selectAll "." + it 
 		.remove!
 
+exitChForce = ->
+	exitForce "chforce"
+
+exitEnForce = ->
+	exitForce "enforce"
 
 exitslChEnHSLFxs = ->
 	d3.selectAll ".calldots" 
@@ -125,31 +121,39 @@ exitslChEnHSLFxs = ->
 		.remove!
 # slEnBar
 # slEnRect
+
+## enter2down and enter2up are used to avoid extra comptation needed when only using enter
 lsExplain = [
-	{"exit": (-> ), "enter": slBlank, "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work.</br></br>
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slBk, "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work.</br></br>
 		I use the data from wikipedia color entry for different language. My assumption was: </br></br>\"Different language has different way to describ color.\" " },
-	{"exit": (-> ), "enter": slChHSLFxS, "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that can be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "},
-	{"exit": (-> ), "enter": slChHSLFxL, "text": "or Lightness as the radius."},
-	# {"exit": (-> ), "enter": slBlank, "text": "You can notice that there are many white spaces, we usually use the adjacent name for these colors."},
-	{"exit": (-> ), "enter": slEnHSLFxL, "text": "Here is the English Dataset, keeping Lightness as constant. "},
-	{"exit": (-> ), "enter": slEnHSLFxS, "text": "Keeping Saturation as constant."},
-	{"exit": exitslChEnHSLFxs, "enter": slChEnHSLFxs, "text": "Comparing the two dataset, you can see that English has a richer entry of color names."},
-	# {"exit": exitslChEnHSLFxs, "enter": slBatHSLFxs, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
-	# {"exit": (-> ), "enter": , "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
-	{"exit": (-> ), "enter": slChForce, "text": "A better visualization will be to split the name of the color, words by words. "},
-	{"exit": (-> ), "enter": slHighChTop, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
-	{"exit": (-> ), "enter": slHighChAdj , "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective for color. "},
-	{"exit": (-> ), "enter": slHighChObj, "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."},
-	{"exit": exitChForce, "enter": slHighChMis, "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."},
-	{"exit": (-> ), "enter": slEnForce, "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."},
-	{"exit": (-> ), "enter": slHighEnTop, "text": "In English, the top three colors are Blue, Green and  Pink."},
-	{"exit": (-> ), "enter": slHighEnBase, "text": "You can also notice the same characteritics of using base color, "},
-	{"exit": (-> ), "enter": slHighEnObj, "text": "association from object"},
-	{"exit": (-> ), "enter": slHighEnFlower, "text": "from flowers and fruits"},
-	{"exit": (-> ), "enter": slHighEnAdj, "text": "and with adjective."},
-	{"exit": (-> ), "enter": slHighEnGeo, "text": "But some interesting naming convention in English, is using geolocation, "},
-	{"exit": (-> ), "enter": slHighEnIdea, "text": "and concept. "},
-	{"exit": (-> ), "enter": slBlank, "text": "This process represents some concepts that I believe in visualization: keep testing different model, and learn something new on your dataset. </br></br> 
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slChHSLFxS, "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that can be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slChHSLFxL, "text": "or Lightness as the radius."},
+	# {"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slBk, "text": "You can notice that there are many white spaces, we usually use the adjacent name for these colors."},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slEnHSLFxL, "text": "Here is the English Dataset, keeping Lightness as constant. "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slEnHSLFxS, "text": "Keeping Saturation as constant."},
+	{"exit2up": (->), "exit2down": (->), "exit": exitslChEnHSLFxs, "enter2up": slBk, "enter2down": slBk, "enter": slChEnHSLFxs, "text": "Comparing the two dataset, you can see that English has a richer entry of color names."},
+	# {"exit2up": (->), "exit2down": (->), "exit": exitslChEnHSLFxs, "enter2up": slBk, "enter2down": slBk, "enter": slBatHSLFxs, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
+	# {"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": , "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
+
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slBk, "text": "However, it's always worth asking: is this the best model to represent our dataset?</br></br>Let's play around a bit."},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slBk, "text": "We need to play around f"},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slBk, "text": "However, it's always worth asking: have we find the best model to represent our dataset?"},
+	
+	{"exit2up": exitChForce, "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slChForce, "enter": slBk, "text": "A better visualization will be to split the name of the color, words by words. "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighChTop, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighChAdj , "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective for color. "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighChObj, "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."},
+	{"exit2up": (->), "exit2down": exitChForce, "exit": (-> ), "enter2up": slChForce, "enter2down": slBk, "enter": slHighChMis, "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."},
+	
+	{"exit2up": exitEnForce, "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slEnForce, "enter": slBk, "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnTop, "text": "In English, the top three colors are Blue, Green and  Pink."},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnBase, "text": "You can also notice the same characteritics of using base color, "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnObj, "text": "association from object"},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnFlower, "text": "from flowers and fruits"},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnAdj, "text": "and with adjective."},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnGeo, "text": "But some interesting naming convention in English, is using geolocation, "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slHighEnIdea, "text": "and concept. "},
+	{"exit2up": (->), "exit2down": (->), "exit": (-> ), "enter2up": slBk, "enter2down": slBk, "enter": slBk, "text": "This process represents some concepts that I believe in visualization: keep testing different model, and learn something new on your dataset. </br></br> 
 	There is a thinking that treats visualization as a magical process that prettifies the output. Yet the only way we can make meaningfull graph is when we discover something meaningfull during our research.</br></br> 
 	People are relying on us to see the world. Out of everyone, we are the one who needs to have these interesting tests/ models/ questions/ hypothesis at hands, because if we don't know the color 'red', our story will never have'red' in it. </br></br></br>
 	By Muyueh Lee, </br>adapted from his talk \"Green Honey\" @\#OpenDataWorkshop2013."},
@@ -158,10 +162,17 @@ lsExplain = [
 
 
 ticking = (i)->	
+	
 	if i is not sld.hghidx
-		if sld.hghidx is not -1 then lsExplain[sld.hghidx].exit!
+		d = if sld.hghidx < i then "d" else "u"
+		
+		if sld.hghidx is not -1
+			if d is "d" then lsExplain[sld.hghidx].exit2down! else lsExplain[sld.hghidx].exit2up!
+			lsExplain[sld.hghidx].exit!
+
 		sld.hghidx := i
 		updtBlackIdxDots!
+		if d is "d" then lsExplain[sld.hghidx].enter2down! else lsExplain[sld.hghidx].enter2up!
 		lsExplain[sld.hghidx].enter!
 
 scrollingTo = (i)->

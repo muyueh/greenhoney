@@ -20,8 +20,6 @@ buildForce = ->
 
 		f.data := f.data.filter f.targetFunc
 
-		console.log f.data.filter f.targetFunc
-
 		force = d3.layout.force!
 			.nodes f.data
 			.links []
