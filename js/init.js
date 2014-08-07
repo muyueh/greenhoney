@@ -1,4 +1,4 @@
-var ref$, listsToObj, join, gnh, svg, cleanName, cleanPunc, ifNaN, clone, countColor, initBar, appendCircle;
+var ref$, listsToObj, join, gnh, svg, cleanName, cleanPunc, ifNaN, clone, countColor, initBar, appendCircle, setupslide;
 ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join;
 gnh = {};
 gnh.margin = {
@@ -135,6 +135,14 @@ appendCircle = function(){
       return build;
     };
   }
+};
+setupslide = function(){
+  initBar();
+  initiateData();
+  scrolling();
+  return $(window).scroll(function(){
+    return scrolling();
+  });
 };
 (function(){
   var wait;

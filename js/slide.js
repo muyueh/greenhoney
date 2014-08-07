@@ -1,4 +1,4 @@
-var sld, updtBlackIdxDots, slBlank, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, slEnBar, slEnRect, slChForce, slEnForce, slHighEnTop, slHighEnBase, slHighEnObj, slHighEnFlower, slHighEnAdj, slHighEnGeo, slHighEnIdea, exitForce, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData, setupslide;
+var sld, updtBlackIdxDots, slBlank, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, slEnBar, slEnRect, slChForce, slHighChTop, slHighChAdj, slHighChObj, slHighChMis, slEnForce, slHighEnTop, slHighEnBase, slHighEnObj, slHighEnFlower, slHighEnAdj, slHighEnGeo, slHighEnIdea, exitChForce, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData;
 sld = {};
 sld.screenh = $(window).height();
 sld.hghidx = -1;
@@ -59,41 +59,54 @@ slEnRect = function(){
   return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildRect())();
 };
 slChForce = function(){
-  return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildForce().data(gnh.clr["clr_ch"]).grpnm(gnh.grpclr["clr_en"].map(function(it){
+  return appendCircle().data(gnh.clr["clr_ch"]).selector("chforce").updateModel(buildForce().selector("chforce").data(gnh.clr["clr_ch"]).grpnm(gnh.grpclr["clr_ch"].map(function(it){
     return it.key;
   })))();
 };
+slHighChTop = function(){
+  return hightlightGroup(["紅", "藍", "綠"], "chforce");
+};
+slHighChAdj = function(){
+  return hightlightGroup(["暗", "亮"], "chforce");
+};
+slHighChObj = function(){
+  return hightlightGroup(["鮭", "石", "松"], "chforce");
+};
+slHighChMis = function(){
+  return hightlightGroup(["青"], "chforce");
+};
 slEnForce = function(){
-  return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildForce().data(gnh.clr["clr_en"]).grpnm(gnh.grpclr["clr_en"].map(function(it){
+  return appendCircle().data(gnh.clr["clr_en"]).selector("enforce").updateModel(buildForce().selector("enforce").data(gnh.clr["clr_en"]).grpnm(gnh.grpclr["clr_en"].map(function(it){
     return it.key;
   })))();
 };
 slHighEnTop = function(){
-  return hightlightGroup(["blue", "green", "pink"]);
+  return hightlightGroup(["blue", "green", "pink"], "enforce");
 };
 slHighEnBase = function(){
-  return hightlightGroup(["blue", "green", "pink", "red", "yellow", "orange", "magenta", "purple", "gray", "black", "white", "cerulean", "maroon", "khaki", "cyan"]);
+  return hightlightGroup(["blue", "green", "pink", "red", "yellow", "orange", "magenta", "purple", "gray", "black", "white", "cerulean", "maroon", "khaki", "cyan"], "enforce");
 };
 slHighEnObj = function(){
-  return hightlightGroup(["cooper", "candy", "sky", "taupe", "carmine", "gold", "crimson", "crayola", "silver", "turquoise", "liver", "slate", "royal", "ruby", "puce", "coral", "sea", "salmon"]);
+  return hightlightGroup(["cooper", "candy", "sky", "taupe", "carmine", "gold", "crimson", "crayola", "silver", "turquoise", "liver", "slate", "royal", "ruby", "puce", "coral", "sea", "salmon"], "enforce");
 };
 slHighEnFlower = function(){
-  return hightlightGroup(["rose", "lavender", "violet", "fuchsia", "orchid", "indigo", "lime", "lemon", "raspberry", "peach", "mauve", "apple", "tangerine", "olive", "moss", "cerise", "lilac", "chestnut", "bud"]);
+  return hightlightGroup(["rose", "lavender", "violet", "fuchsia", "orchid", "indigo", "lime", "lemon", "raspberry", "peach", "mauve", "apple", "tangerine", "olive", "moss", "cerise", "lilac", "chestnut", "bud"], "enforce");
 };
 slHighEnAdj = function(){
-  return hightlightGroup(["dark", "light", "deep", "medium", "pale", "rich", "bright", "old", "rich", "grey", "vivid", "golden", "antique"]);
+  return hightlightGroup(["dark", "light", "deep", "medium", "pale", "rich", "bright", "old", "rich", "grey", "vivid", "golden", "antique"], "enforce");
 };
 slHighEnGeo = function(){
-  return hightlightGroup(["french", "spanish", "persian", "tuscan", "english"]);
+  return hightlightGroup(["french", "spanish", "persian", "tuscan", "english"], "enforce");
 };
 slHighEnIdea = function(){
-  return hightlightGroup(["electric", "x", "mensell", "pastel", "html", "web", "pantone", "ryb"]);
+  return hightlightGroup(["electric", "x", "mensell", "pastel", "html", "web", "pantone", "ryb"], "enforce");
 };
-exitForce = function(){
+exitChForce = function(){
   gnh.force.stop();
-  return d3.selectAll(".grpname").transition().style({
+  d3.selectAll(".grpchforce").transition().style({
     "opacity": 0
   }).remove();
+  return d3.selectAll(".chforce").remove();
 };
 exitslChEnHSLFxs = function(){
   d3.selectAll(".calldots").transition().duration(1000).attr({
@@ -105,23 +118,15 @@ lsExplain = [
   {
     "exit": function(){},
     "enter": slBlank,
-    "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work."
-  }, {
-    "exit": function(){},
-    "enter": slBlank,
-    "text": "I use the data from wikipedia color entry for different language. My assumption was: \"Different language has different interest for color.\" "
+    "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work.</br></br>I use the data from wikipedia color entry for different language. My assumption was: </br></br>\"Different language has different way to describ color.\" "
   }, {
     "exit": function(){},
     "enter": slChHSLFxS,
-    "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that needs to be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "
+    "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that can be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "
   }, {
     "exit": function(){},
     "enter": slChHSLFxL,
     "text": "or Lightness as the radius."
-  }, {
-    "exit": function(){},
-    "enter": slBlank,
-    "text": "You can notice that there are many white spaces, we usually use the adjacent name for these colors."
   }, {
     "exit": function(){},
     "enter": slEnHSLFxL,
@@ -135,35 +140,31 @@ lsExplain = [
     "enter": slChEnHSLFxs,
     "text": "Comparing the two dataset, you can see that English has a richer entry of color names."
   }, {
-    "exit": exitStruct,
-    "enter": enterStruct,
-    "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."
-  }, {
     "exit": function(){},
-    "enter": slEnBar,
+    "enter": slChForce,
     "text": "A better visualization will be to split the name of the color, words by words. "
   }, {
     "exit": function(){},
-    "enter": slEnRect,
+    "enter": slHighChTop,
     "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."
   }, {
-    "exit": exitForce,
-    "enter": slEnForce,
-    "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective. "
+    "exit": function(){},
+    "enter": slHighChAdj,
+    "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective for color. "
   }, {
     "exit": function(){},
-    "enter": slBlank,
+    "enter": slHighChObj,
     "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."
   }, {
-    "exit": function(){},
-    "enter": slBlank,
+    "exit": exitChForce,
+    "enter": slHighChMis,
     "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."
   }, {
-    "exit": exitForce,
+    "exit": function(){},
     "enter": slEnForce,
     "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."
   }, {
-    "exit": exitForce,
+    "exit": function(){},
     "enter": slHighEnTop,
     "text": "In English, the top three colors are Blue, Green and  Pink."
   }, {
@@ -245,12 +246,4 @@ initiateData = function(){
     return scrollingTo(i);
   });
   return sld.dscrpts = [].slice.call(document.getElementsByClassName("description"));
-};
-setupslide = function(){
-  initBar();
-  initiateData();
-  scrolling();
-  return $(window).scroll(function(){
-    return scrolling();
-  });
 };

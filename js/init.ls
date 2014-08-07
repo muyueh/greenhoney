@@ -163,6 +163,14 @@ appendCircle = ->
 
 
 
+setupslide = ->
+	initBar!
+	initiate-data!
+	scrolling!
+
+	$ window .scroll ->
+		scrolling!
+
 do ->
 	wait = gnh.lsfl.length 
 	gnh.lsfl.map ->

@@ -1,3 +1,5 @@
+#TODO detect scrolling direction; implement different type of transition
+
 # Idea spereration of concern; build this as a function; and feeed data inside; now we are still relying on global var to send data.
 
 # munsell color system
@@ -50,37 +52,65 @@ slEnBar = ->
 slEnRect = -> 
 	do(appendCircle! .data gnh.clr["clr_en"] .updateModel(buildRect!) )
 
+
 slChForce = -> 
-	do(appendCircle! .data gnh.clr["clr_ch"] .updateModel(buildForce!.data gnh.clr["clr_ch"] .grpnm (gnh.grpclr["clr_en"].map -> it.key) ) )
+	do(appendCircle! .data gnh.clr["clr_ch"] .selector "chforce" .updateModel(buildForce! .selector "chforce" .data gnh.clr["clr_ch"] .grpnm (gnh.grpclr["clr_ch"].map -> it.key) ) )
+
+slHighChTop = ->
+	hightlightGroup ["紅" "藍" "綠"], "chforce"
+
+slHighChAdj = ->
+	hightlightGroup ["暗" "亮"], "chforce"
+
+slHighChObj = ->
+	hightlightGroup ["鮭" "石" "松"], "chforce"
+
+slHighChMis = ->
+	hightlightGroup ["青"], "chforce"
 
 slEnForce = -> 
-	do(appendCircle! .data gnh.clr["clr_en"] .updateModel(buildForce!.data gnh.clr["clr_en"] .grpnm (gnh.grpclr["clr_en"].map -> it.key) ) )
+	do(appendCircle! .data gnh.clr["clr_en"] .selector "enforce" .updateModel(buildForce!.selector "enforce" .data gnh.clr["clr_en"] .grpnm (gnh.grpclr["clr_en"].map -> it.key) ) )
+
 
 slHighEnTop = ->
-	hightlightGroup ["blue" "green" "pink"]
+	hightlightGroup ["blue" "green" "pink"], "enforce"
 slHighEnBase = ->
-	hightlightGroup ["blue" "green" "pink" "red" "yellow" "orange" "magenta" "purple" "gray" "black" "white" "cerulean" "maroon" "khaki" "cyan"]
+	hightlightGroup ["blue" "green" "pink" "red" "yellow" "orange" "magenta" "purple" "gray" "black" "white" "cerulean" "maroon" "khaki" "cyan"], "enforce"
 slHighEnObj = ->
-	hightlightGroup ["cooper" "candy" "sky" "taupe" "carmine" "gold" "crimson" "crayola" "silver" "turquoise" "liver" "slate" "royal" "ruby" "puce" "coral" "sea" "salmon"]
+	hightlightGroup ["cooper" "candy" "sky" "taupe" "carmine" "gold" "crimson" "crayola" "silver" "turquoise" "liver" "slate" "royal" "ruby" "puce" "coral" "sea" "salmon"], "enforce"
 slHighEnFlower = ->
-	hightlightGroup ["rose" "lavender" "violet" "fuchsia" "orchid" "indigo" "lime" "lemon" "raspberry" "peach" "mauve" "apple" "tangerine" "olive" "moss" "cerise" "lilac" "chestnut" "bud"]
+	hightlightGroup ["rose" "lavender" "violet" "fuchsia" "orchid" "indigo" "lime" "lemon" "raspberry" "peach" "mauve" "apple" "tangerine" "olive" "moss" "cerise" "lilac" "chestnut" "bud"], "enforce"
 slHighEnAdj = ->
-	hightlightGroup ["dark" "light" "deep" "medium" "pale" "rich" "bright" "old" "rich" "grey" "vivid" "golden" "antique"]
+	hightlightGroup ["dark" "light" "deep" "medium" "pale" "rich" "bright" "old" "rich" "grey" "vivid" "golden" "antique"], "enforce"
 slHighEnGeo = ->
-	hightlightGroup ["french" "spanish" "persian" "tuscan" "english"]
+	hightlightGroup ["french" "spanish" "persian" "tuscan" "english"], "enforce"
 slHighEnIdea = ->
-	hightlightGroup ["electric" "x" "mensell" "pastel" "html" "web" "pantone" "ryb"]
+	hightlightGroup ["electric" "x" "mensell" "pastel" "html" "web" "pantone" "ryb"], "enforce"
 
 
-exitForce = ->
+# exitForce = ->
+# 	gnh.force.stop!
+
+# 	d3.selectAll ".grpchforce"
+# 		.transition!
+# 		.style {
+# 			"opacity": 0
+# 		}
+# 		.remove!
+
+exitChForce = ->
 	gnh.force.stop!
 
-	d3.selectAll ".grpname"
+	d3.selectAll ".grpchforce"
 		.transition!
 		.style {
 			"opacity": 0
 		}
 		.remove!
+
+	d3.selectAll ".chforce"
+		.remove!
+
 
 exitslChEnHSLFxs = ->
 	d3.selectAll ".calldots" 
@@ -93,26 +123,26 @@ exitslChEnHSLFxs = ->
 
 	svg.selectAll ".clrtitle"
 		.remove!
-
-
+# slEnBar
+# slEnRect
 lsExplain = [
-	{"exit": (-> ), "enter": slBlank, "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work." },
-	{"exit": (-> ), "enter": slBlank, "text": "I use the data from wikipedia color entry for different language. My assumption was: \"Different language has different interest for color.\" "},	
-	{"exit": (-> ), "enter": slChHSLFxS, "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that needs to be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "},
+	{"exit": (-> ), "enter": slBlank, "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work.</br></br>
+		I use the data from wikipedia color entry for different language. My assumption was: </br></br>\"Different language has different way to describ color.\" " },
+	{"exit": (-> ), "enter": slChHSLFxS, "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that can be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "},
 	{"exit": (-> ), "enter": slChHSLFxL, "text": "or Lightness as the radius."},
-	{"exit": (-> ), "enter": slBlank, "text": "You can notice that there are many white spaces, we usually use the adjacent name for these colors."},
+	# {"exit": (-> ), "enter": slBlank, "text": "You can notice that there are many white spaces, we usually use the adjacent name for these colors."},
 	{"exit": (-> ), "enter": slEnHSLFxL, "text": "Here is the English Dataset, keeping Lightness as constant. "},
 	{"exit": (-> ), "enter": slEnHSLFxS, "text": "Keeping Saturation as constant."},
 	{"exit": exitslChEnHSLFxs, "enter": slChEnHSLFxs, "text": "Comparing the two dataset, you can see that English has a richer entry of color names."},
 	# {"exit": exitslChEnHSLFxs, "enter": slBatHSLFxs, "text": "Using this model, we can also analysis different dataset, such as the color patern in the Batman triology. (Data Coustesy of )"},
-	{"exit": exitStruct, "enter": enterStruct, "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
-	{"exit": (-> ), "enter": slEnBar, "text": "A better visualization will be to split the name of the color, words by words. "},
-	{"exit": (-> ), "enter": slEnRect, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
-	{"exit": exitForce, "enter": slEnForce, "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective. "},
-	{"exit": (-> ), "enter": slBlank, "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."},
-	{"exit": (-> ), "enter": slBlank, "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."},
-	{"exit": exitForce, "enter": slEnForce, "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."},
-	{"exit": exitForce, "enter": slHighEnTop, "text": "In English, the top three colors are Blue, Green and  Pink."},
+	# {"exit": (-> ), "enter": , "text": "However, it's always worth asking: have we find the best model to represent our dataset? </br></br> For instance, there seems to be structure in the names of the colors: names share suffix."},
+	{"exit": (-> ), "enter": slChForce, "text": "A better visualization will be to split the name of the color, words by words. "},
+	{"exit": (-> ), "enter": slHighChTop, "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."},
+	{"exit": (-> ), "enter": slHighChAdj , "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective for color. "},
+	{"exit": (-> ), "enter": slHighChObj, "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."},
+	{"exit": exitChForce, "enter": slHighChMis, "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."},
+	{"exit": (-> ), "enter": slEnForce, "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."},
+	{"exit": (-> ), "enter": slHighEnTop, "text": "In English, the top three colors are Blue, Green and  Pink."},
 	{"exit": (-> ), "enter": slHighEnBase, "text": "You can also notice the same characteritics of using base color, "},
 	{"exit": (-> ), "enter": slHighEnObj, "text": "association from object"},
 	{"exit": (-> ), "enter": slHighEnFlower, "text": "from flowers and fruits"},
@@ -187,10 +217,3 @@ initiate-data = ->
 	sld.dscrpts := [].slice.call document.getElementsByClassName("description") # HTMLcollection to list
 
 
-setupslide = -> 
-	initBar!
-	initiate-data!
-	scrolling!
-
-	$ window .scroll ->
-		scrolling!

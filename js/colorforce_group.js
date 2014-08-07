@@ -75,7 +75,7 @@ buildForce = function(){
     f.data = f.data.filter(f.targetFunc);
     gnh.force = d3.layout.force().nodes(f.data).links([]).gravity(0).charge(0).size([f.size, f.size]).on("tick", tick);
     node = svg.selectAll("." + f.selector).data(f.data).call(gnh.force.drag);
-    svg.selectAll(".grpname").data(take(100, f.grpnm)).enter().append("text").attr({
+    svg.selectAll(".grp" + f.selector).data(take(100, f.grpnm)).enter().append("text").attr({
       "x": function(it, i){
         return f.posX(i);
       },
@@ -87,7 +87,7 @@ buildForce = function(){
         }
       },
       "class": function(it){
-        return "grpname grp" + it;
+        return "grp" + f.selector + " grp" + it;
       }
     }).style({
       "text-anchor": "middle"
@@ -109,18 +109,19 @@ buildForce = function(){
     };
   }
 };
-hightlightGroup = function(name){
+hightlightGroup = function(name, selector){
+  selector = selector || ".cdots";
   if (isType("String", name)) {
-    d3.selectAll(".cdots:not(.prm" + name + "), .grpname:not(.grp" + name + ")").transition().style({
+    d3.selectAll("." + selector + ":not(.prm" + name + "), .grp" + selector + ":not(.grp" + name + ")").transition().style({
       "opacity": 0.2
     });
     return d3.selectAll(".prm" + name + ", .grp" + name).transition().style({
       "opacity": 1
     });
   } else if (isType("Array", name)) {
-    d3.selectAll((".cdots" + join("", name.map(function(it){
+    d3.selectAll(("." + selector + join("", name.map(function(it){
       return ":not(.prm" + it + ")";
-    }))) + (", .grpname" + join("", name.map(function(it){
+    }))) + (",.grp" + selector + join("", name.map(function(it){
       return ":not(.grp" + it + ")";
     })))).transition().style({
       "opacity": 0.2

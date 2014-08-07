@@ -9,7 +9,6 @@ buildPallete = function(){
     return d3.hsl(it);
   };
   m.mdlfx = "s";
-  m.lightload = false;
   build = function(it){
     return it.each(function(it){
       var clr, attr;

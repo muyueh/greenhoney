@@ -5,7 +5,6 @@ buildPallete = ->
 	m.cr = 250
 	m.mdl = -> d3.hsl it
 	m.mdlfx = "s"
-	m.lightload = false
 
 	build = ->
 		it

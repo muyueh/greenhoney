@@ -95,14 +95,14 @@ buildForce = ->
 			.data f.data
 			.call gnh.force.drag
 
-		svg.selectAll ".grpname"
+		svg.selectAll ".grp" + f.selector
 			.data take 100 f.grpnm
 			.enter!
 			.append "text"
 			.attr {
 				"x": (it, i)-> f.posX i
 				"y": (it, i)-> if i <= col then (f.posY i) + 55 else (f.posY i) + 40
-				"class": -> "grpname grp" + it
+				"class": -> "grp" + f.selector + " grp" + it
 			}	
 			.style {
 				"text-anchor": "middle"
@@ -124,9 +124,11 @@ buildForce = ->
 
 	build
 
-hightlightGroup = (name)->
+# selector without class dots
+hightlightGroup = (name, selector)->
+	selector = selector or ".cdots"
 	if is-type "String" name
-		d3.selectAll ".cdots:not(.prm" + name + "), .grpname:not(.grp" + name + ")"
+		d3.selectAll "." + selector + ":not(.prm" + name + "), .grp" + selector +  ":not(.grp" + name + ")"
 			.transition!
 			.style {
 				"opacity": 0.2
@@ -139,7 +141,7 @@ hightlightGroup = (name)->
 			}
 
 	else if is-type "Array" name
-		d3.selectAll (".cdots" + join "" (name.map -> ":not(.prm" + it + ")")) + (", .grpname" + (join "" (name.map -> ":not(.grp" + it + ")")))
+		d3.selectAll ("." + selector + join "" (name.map -> ":not(.prm" + it + ")")) + (",.grp" + selector + (join "" (name.map -> ":not(.grp" + it + ")")))
 			.transition!
 			.style {
 				"opacity": 0.2
