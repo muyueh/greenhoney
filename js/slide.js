@@ -1,4 +1,4 @@
-var sld, updtBlackIdxDots, slBk, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slBatHSLFxs, slEnBar, slEnRect, slChForce, slHighChTop, slHighChAdj, slHighChObj, slHighChMis, slEnForce, slHighEnTop, slHighEnBase, slHighEnObj, slHighEnFlower, slHighEnAdj, slHighEnGeo, slHighEnIdea, exitForce, exitChForce, exitEnForce, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData;
+var sld, updtBlackIdxDots, slBk, slWiki, exitWiki, enter2upWiki, slChHSLFxS, slChHSLFxL, slEnHSLFxL, slEnHSLFxS, slChEnHSLFxs, slEnBar, slEnRect, slChForce, slHighChTop, slHighChAdj, slHighChObj, slHighChMis, slEnForce, slHighEnTop, slHighEnBase, slHighEnObj, slHighEnFlower, slHighEnAdj, slHighEnGeo, slHighEnIdea, exitForce, exitChForce, exitEnForce, exitslChEnHSLFxs, lsExplain, ticking, scrollingTo, scrolling, initiateData, setupslide;
 sld = {};
 sld.screenh = $(window).height();
 sld.hghidx = -1;
@@ -15,6 +15,19 @@ updtBlackIdxDots = function(){
 };
 slBk = function(){
   return console.log("do nothing");
+};
+slWiki = function(){
+  return appendCircle().textload(true).data(gnh.clr["clr_ch"]).updateModel(buildList()).textModel(buildList().type("text"))();
+};
+exitWiki = function(){
+  return d3.selectAll(".clrnm").transition().style({
+    "opacity": 0
+  });
+};
+enter2upWiki = function(){
+  return d3.selectAll(".clrnm").transition().style({
+    "opacity": 0.3
+  });
 };
 slChHSLFxS = function(){
   return appendCircle().data(gnh.clr["clr_ch"]).updateModel(buildPallete())();
@@ -33,7 +46,7 @@ slChEnHSLFxs = function(){
   appendCircle().lightload(true).data(gnh.clr["clr_en"]).selector("encdatas").updateModel(buildPallete().mdlfx("l").cr(100).cx(120).cy(460))();
   appendCircle().lightload(true).data(gnh.clr["clr_ch"]).selector("chcdatas").updateModel(buildPallete().mdlfx("s").cr(100).cx(360))();
   appendCircle().lightload(true).data(gnh.clr["clr_ch"]).selector("chcdatal").updateModel(buildPallete().mdlfx("l").cr(100).cx(360).cy(460))();
-  return svg.selectAll("text").data(["English", "Chinese"]).enter().append("text").attr({
+  return svg.selectAll(".clrtitle").data(["English", "Chinese"]).enter().append("text").attr({
     "y": 370,
     "x": function(it, i){
       if (i === 0) {
@@ -46,11 +59,6 @@ slChEnHSLFxs = function(){
   }).text(function(it){
     return it;
   });
-};
-slBatHSLFxs = function(){
-  appendCircle().data(gnh.clr["bat_1"]).selector("bat_1").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(100))();
-  appendCircle().data(gnh.clr["bat_2"]).selector("bat_2").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(300))();
-  return appendCircle().data(gnh.clr["bat_3"]).selector("bat_3").dtsr(1).updateModel(buildPallete().mdlfx("l").cr(80).cx(500))();
 };
 slEnBar = function(){
   return appendCircle().data(gnh.clr["clr_en"]).updateModel(buildBar())();
@@ -123,12 +131,12 @@ exitslChEnHSLFxs = function(){
 lsExplain = [
   {
     "exit2up": function(){},
-    "exit2down": function(){},
+    "exit2down": exitWiki,
     "exit": function(){},
-    "enter2up": slBk,
+    "enter2up": enter2upWiki,
     "enter2down": slBk,
-    "enter": slBk,
-    "text": "Language represents our model of the world, knowing its limit helps us understand how our perception work.</br></br>I use the data from wikipedia color entry for different language. My assumption was: </br></br>\"Different language has different way to describ color.\" "
+    "enter": slWiki,
+    "text": "Language represents our view of the world, and knowing its limits helps us understand how our perception works.</br></br>I used the data from Wikipedia’s “Color” entry for different languages. My assumption was: </br></br>\"Different languages have different ways to describe color.”</br></br><strong>(Scroll Down to Start)</strong>"
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -136,7 +144,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slChHSLFxS,
-    "text": "The Chinese entry has 250+ different color. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that can be projected on a 2D space. </br></br> Using Hue as angle, we can either set Saturation to the radius, "
+    "text": "The Chinese entry has 250+ different colors. </br></br> The Hue-Saturation-Lightness (HSL) model is a 3D model that can be projected on a 2D space. </br></br> Using Hue as an angle, we can set either Saturation as the radius . . ."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -152,7 +160,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slEnHSLFxL,
-    "text": "Here is the English Dataset, keeping Lightness as constant. "
+    "text": "Here is the English Dataset, keeping Lightness as a constant . . . "
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -160,7 +168,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slEnHSLFxS,
-    "text": "Keeping Saturation as constant."
+    "text": "or keeping Saturation as the constant."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -168,31 +176,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slChEnHSLFxs,
-    "text": "Comparing the two dataset, you can see that English has a richer entry of color names."
-  }, {
-    "exit2up": function(){},
-    "exit2down": function(){},
-    "exit": function(){},
-    "enter2up": slBk,
-    "enter2down": slBk,
-    "enter": slBk,
-    "text": "However, it's always worth asking: is this the best model to represent our dataset?</br></br>Let's play around a bit."
-  }, {
-    "exit2up": function(){},
-    "exit2down": function(){},
-    "exit": function(){},
-    "enter2up": slBk,
-    "enter2down": slBk,
-    "enter": slBk,
-    "text": "We need to play around f"
-  }, {
-    "exit2up": function(){},
-    "exit2down": function(){},
-    "exit": function(){},
-    "enter2up": slBk,
-    "enter2down": slBk,
-    "enter": slBk,
-    "text": "However, it's always worth asking: have we find the best model to represent our dataset?"
+    "text": "Comparing the two datasets, you can see that English has a richer entry for color names."
   }, {
     "exit2up": exitChForce,
     "exit2down": function(){},
@@ -200,7 +184,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slChForce,
     "enter": slBk,
-    "text": "A better visualization will be to split the name of the color, words by words. "
+    "text": "However, it's always worth asking: Is this the best model to represent our dataset?</br></br>Notice that the Chinese and English names for colors share a common structure of \"noun/adj + base color\": <ul><li>腥<span class='rd'>紅</span></li><li>鮭<span class='rd'>紅</span></li><li>暗鮭<span class='rd'>紅</span></li></ul> </br><ul><li>Android <span class='gn'>green</span></li><li>Apple <span class='gn'>green</span></li><li>Army <span class='gn'>green</span></li></ul></br>A better visualization will be to split the name of the color, word by word."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -208,7 +192,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighChTop,
-    "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), following by 藍 (blue), and 綠 (green)."
+    "text": "Now we can see that in Chinese, the most popular base color is 紅 (red), followed by 藍 (blue), and 綠 (green)."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -216,7 +200,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighChAdj,
-    "text": "There are frequent used word such as 暗 (dark) and 亮 (light), that is not a base color, but an adjective for color. "
+    "text": "There are frequently used words, such as 暗 (dark) and 亮 (light), which are not base colors but rather adjectives for a color."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -224,7 +208,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighChObj,
-    "text": "We also have object such as 鮭 (summon), 石 (stone), 松 (spine tree), where we have name of object."
+    "text": "There are also objects, such as 鮭 (salmon), 石 (stone), 松 (pine tree), where there is a name of an object."
   }, {
     "exit2up": function(){},
     "exit2down": exitChForce,
@@ -232,7 +216,7 @@ lsExplain = [
     "enter2up": slChForce,
     "enter2down": slBk,
     "enter": slHighChMis,
-    "text": "This visualization also solve a long-time problem, because in Chinese, we have this mysterious color called 青, that no ones really know what it represents. </br></br> Here are all the color with 青 in it."
+    "text": "This visualization also solves a longtime problem: In Chinese, we have this mysterious color called 青 but no one really knows what it represents. </br></br> Here are all the colors with 青 in their names."
   }, {
     "exit2up": exitEnForce,
     "exit2down": function(){},
@@ -240,7 +224,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slEnForce,
     "enter": slBk,
-    "text": "Now let's see English. Remember that in Chinese the top three color is Red-Blue-Green."
+    "text": "Now let's see English. Remember that in Chinese, the top three colors are Red, Blue, and Green."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -248,7 +232,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnTop,
-    "text": "In English, the top three colors are Blue, Green and  Pink."
+    "text": "In English, the top three colors are Blue, Green, and Pink."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -256,7 +240,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnBase,
-    "text": "You can also notice the same characteritics of using base color, "
+    "text": "You can also see the same characteristics of using a base color:"
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -264,7 +248,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnObj,
-    "text": "association from object"
+    "text": "association from object . . . "
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -272,7 +256,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnFlower,
-    "text": "from flowers and fruits"
+    "text": "from flowers and fruits . . . "
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -280,7 +264,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnAdj,
-    "text": "and with adjective."
+    "text": "and with adjectives."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -288,7 +272,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnGeo,
-    "text": "But some interesting naming convention in English, is using geolocation, "
+    "text": "But some interesting naming conventions in English use geolocation "
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -296,7 +280,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slHighEnIdea,
-    "text": "and concept. "
+    "text": "and concepts."
   }, {
     "exit2up": function(){},
     "exit2down": function(){},
@@ -304,7 +288,7 @@ lsExplain = [
     "enter2up": slBk,
     "enter2down": slBk,
     "enter": slBk,
-    "text": "This process represents some concepts that I believe in visualization: keep testing different model, and learn something new on your dataset. </br></br> There is a thinking that treats visualization as a magical process that prettifies the output. Yet the only way we can make meaningfull graph is when we discover something meaningfull during our research.</br></br> People are relying on us to see the world. Out of everyone, we are the one who needs to have these interesting tests/ models/ questions/ hypothesis at hands, because if we don't know the color 'red', our story will never have'red' in it. </br></br></br>By Muyueh Lee, </br>adapted from his talk \"Green Honey\" @#OpenDataWorkshop2013."
+    "text": "This process represents some concepts that I believe are true in visualization: Keep testing different models and learn something new from your dataset. </br></br>  There is a way of thinking that treats visualization as a magical process that prettifies the output, yet the only way we can make a meaningful graph is when we discover something meaningful during our research.</br></br>  People are relying on us to see the world. Out of everyone, we are the ones who need to have these interesting tests / models / questions / hypotheses at hand because if we don't know the color “red,” our story will never have “red” in it. </br></br></br>By Muyueh Lee @muyueh, </br>adapted from his talk \"Green Honey\" @#OpenDataWorkshop2013."
   }
 ];
 ticking = function(i){
@@ -369,3 +353,30 @@ initiateData = function(){
   });
   return sld.dscrpts = [].slice.call(document.getElementsByClassName("description"));
 };
+setupslide = function(){
+  initBar();
+  initiateData();
+  scrolling();
+  return $(window).scroll(function(){
+    return scrolling();
+  });
+};
+(function(){
+  var wait;
+  wait = gnh.lsfl.length;
+  return gnh.lsfl.map(function(it){
+    return d3.tsv("http://d3gwo6jloocu32.cloudfront.net/greenhoney/data/" + it + ".tsv?v=3", function(err, colorTSV){
+      if (colorTSV[0].name !== undefined) {
+        colorTSV = colorTSV.filter(function(it){
+          gnh.allclrls[cleanName(it.name)] = it.color;
+          it.name = cleanPunc(it.name);
+          return true;
+        });
+      }
+      gnh.clr[it] = colorTSV;
+      if (--wait === 0) {
+        return setupslide();
+      }
+    });
+  });
+})();

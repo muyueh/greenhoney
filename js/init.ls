@@ -1,5 +1,5 @@
 {lists-to-obj, join} = require "prelude-ls"
-
+## neglecting 色 
 gnh = {}
 
 gnh.margin = {top: 10, left: 10, right: 20, bottom: 20}
@@ -7,7 +7,8 @@ gnh.w = 1000 - gnh.margin.left - gnh.margin.right
 gnh.h = 850 - gnh.margin.top - gnh.margin.bottom
 
 
-gnh.lsfl = ["clr_en" "clr_ch" "clr_fr" "bat_1" "bat_2" "bat_3"]
+gnh.lsfl = ["clr_en" "clr_ch"]
+# gnh.lsfl = ["clr_en" "clr_ch" "clr_fr" "bat_1" "bat_2" "bat_3"]
 gnh.clr = {
 	# "clr_en": 
 	# "clr_ch": 
@@ -62,6 +63,7 @@ countColor = (list, splitFunc)->
 		clr.grp = (splitFunc clr.name)
 
 		clr.grp.map (nmtoken)-> 
+			if nmtoken is "色" then return 
 			if freq[nmtoken] is undefined then freq[nmtoken] := []
 			freq[nmtoken].push clone clr
 
@@ -96,7 +98,7 @@ initBar = ->
 	delRule = [
 		{name: "clr_en", del: " "}
 		{name: "clr_ch", del: ""}
-		{name: "clr_fr", del: " "}
+		# {name: "clr_fr", del: " "}
 	]
 
 	delRule.map (fl)-> 
@@ -113,6 +115,9 @@ appendCircle = ->
 	m.updateModel = (->)
 	m.dtsr = 3
 	m.lightload = false
+
+	m.textload = false
+	m.textModel = (->)
 
 	build = ->
 		# console.log m.data
@@ -157,6 +162,24 @@ appendCircle = ->
 			}
 			.remove!
 
+		if m.textload
+			c
+				.enter!
+				.append "text"
+				.attr {
+					"class": "clrnm"
+				}
+				.style {
+					"opacity": 0
+				}
+				.transition!
+				.style {
+					"opacity": 1
+				}
+				.text -> it.name
+				.call m.textModel
+
+
 	for let it of m
 		build[it] = (v)-> 
 			m[it] := v
@@ -164,28 +187,3 @@ appendCircle = ->
 
 	build
 
-
-
-setupslide = ->
-	initBar!
-	initiate-data!
-	scrolling!
-
-	$ window .scroll ->
-		scrolling!
-
-do ->
-	wait = gnh.lsfl.length 
-	gnh.lsfl.map ->
-		err, colorTSV <- d3.tsv "./data/" + it + ".tsv"
-
-		if colorTSV[0].name is not undefined
-			colorTSV = colorTSV.filter ->
-				gnh.allclrls[cleanName it.name] := it.color
-				it.name = cleanPunc it.name
-
-				true
-
-		gnh.clr[it] := colorTSV
-
-		if --wait is 0 then setupslide!

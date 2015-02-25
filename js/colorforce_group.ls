@@ -2,48 +2,56 @@
 
 gnh.force = null
 
-targetCenter = ->
-	it.target = {}
-	it.target.x = 400
-	it.target.y = 400
-	true
+# targetCenter = ->
+# 	it.target = {}
+# 	it.target.x = 400
+# 	it.target.y = 400
+# 	true
 
-targetHSHS = ->
-	clr = d3.hsl it.color
-	it.target.x = ifNaN clr.h
-	it.target.y = ifNaN clr.s * 600
+# targetHSLS = ->
+# 	clr = d3.hsl it.color
+# 	it.target.x = ifNaN clr.h
+# 	it.target.y = ifNaN clr.s * 600
+# 	true
 
-targetHSLS = ->
-	clr = d3.hsl it.color
-	it.target.x = ifNaN clr.l * 600
-	it.target.y = ifNaN clr.s * 600
+# targetHSLLS = ->
+# 	clr = d3.hsl it.color
+# 	it.target.x = ifNaN clr.l * 600
+# 	it.target.y = ifNaN clr.s * 600
+# 	true
 
-targetRGB = ->
-	clr = d3.rgb it.color
-	it.target.x = clr.g * 1 + 50
-	it.target.y = clr.b * 1 + 50
+# targetRGB = ->
+# 	clr = d3.rgb it.color
+# 	it.target.x = clr.g * 1 + 50
+# 	it.target.y = clr.b * 1 + 50
+# 	true
+
+# targetHSLFxL = ->
+# 	clr = d3.hsl it.color
+# 	it.target = {}
+# 	it.target.x = 250 + Math.cos((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
+# 	it.target.y = 250 + Math.sin((ifNaN clr.h) * Math.PI / 180 ) * 250 * ifNaN clr.l
+# 	true
+
+# targetHCLL = ->
+# 	# clr = d3.hsl it.color
+# 	# it.target.x = ifNaN clr.l * 600
+# 	# it.target.y = ifNaN clr.s * 600
+# 	true
+
+# targetHCLC = ->
+# 	# clr = d3.hsl it.color
+# 	# it.target.x = ifNaN clr.l * 600
+# 	# it.target.y = ifNaN clr.s * 600
+# 	true
 
 
-targetHSLL = ->
-	clr = d3.hsl it.color
-	# it.target.x = ifNaN clr.l * 600
-	# it.target.y = ifNaN clr.s * 600
 
-targetHCLL = ->
-	# clr = d3.hsl it.color
-	# it.target.x = ifNaN clr.l * 600
-	# it.target.y = ifNaN clr.s * 600
-
-targetHCLC = ->
-	# clr = d3.hsl it.color
-	# it.target.x = ifNaN clr.l * 600
-	# it.target.y = ifNaN clr.s * 600
-
-targetRGB = ->
-	# clr = d3.hsl it.color
-	# it.target.x = ifNaN clr.l * 600
-	# it.target.y = ifNaN clr.s * 600
-
+# targetRGB = ->
+# 	# clr = d3.hsl it.color
+# 	# it.target.x = ifNaN clr.l * 600
+# 	# it.target.y = ifNaN clr.s * 600
+# 	true
 
 	
 buildForce = ->

@@ -1,37 +1,6 @@
-var ref$, listsToObj, join, flatten, isType, take, targetCenter, targetHSHS, targetHSLS, targetRGB, targetHSLL, targetHCLL, targetHCLC, buildForce, hightlightGroup, slideDown;
+var ref$, listsToObj, join, flatten, isType, take, buildForce, hightlightGroup, slideDown;
 ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten, isType = ref$.isType, take = ref$.take;
 gnh.force = null;
-targetCenter = function(it){
-  it.target = {};
-  it.target.x = 400;
-  it.target.y = 400;
-  return true;
-};
-targetHSHS = function(it){
-  var clr;
-  clr = d3.hsl(it.color);
-  it.target.x = ifNaN(clr.h);
-  return it.target.y = ifNaN(clr.s * 600);
-};
-targetHSLS = function(it){
-  var clr;
-  clr = d3.hsl(it.color);
-  it.target.x = ifNaN(clr.l * 600);
-  return it.target.y = ifNaN(clr.s * 600);
-};
-targetRGB = function(it){
-  var clr;
-  clr = d3.rgb(it.color);
-  it.target.x = clr.g * 1 + 50;
-  return it.target.y = clr.b * 1 + 50;
-};
-targetHSLL = function(it){
-  var clr;
-  return clr = d3.hsl(it.color);
-};
-targetHCLL = function(){};
-targetHCLC = function(){};
-targetRGB = function(){};
 buildForce = function(){
   var f, col, node, collide, build, i$;
   f = {};

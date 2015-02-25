@@ -1,4 +1,4 @@
-var ref$, listsToObj, join, gnh, svg, cleanName, cleanPunc, ifNaN, clone, countColor, initBar, appendCircle, setupslide;
+var ref$, listsToObj, join, gnh, svg, cleanName, cleanPunc, ifNaN, clone, countColor, initBar, appendCircle;
 ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join;
 gnh = {};
 gnh.margin = {
@@ -9,7 +9,7 @@ gnh.margin = {
 };
 gnh.w = 1000 - gnh.margin.left - gnh.margin.right;
 gnh.h = 850 - gnh.margin.top - gnh.margin.bottom;
-gnh.lsfl = ["clr_en", "clr_ch", "clr_fr", "bat_1", "bat_2", "bat_3"];
+gnh.lsfl = ["clr_en", "clr_ch"];
 gnh.clr = {};
 gnh.allclrls = {};
 gnh.grpclr = {};
@@ -41,6 +41,9 @@ countColor = function(list, splitFunc){
   list.filter(function(clr){
     clr.grp = splitFunc(clr.name);
     clr.grp.map(function(nmtoken){
+      if (nmtoken === "色") {
+        return;
+      }
       if (freq[nmtoken] === undefined) {
         freq[nmtoken] = [];
       }
@@ -77,9 +80,6 @@ initBar = function(){
     }, {
       name: "clr_ch",
       del: ""
-    }, {
-      name: "clr_fr",
-      del: " "
     }
   ];
   return delRule.map(function(fl){
@@ -100,6 +100,8 @@ appendCircle = function(){
   m.updateModel = function(){};
   m.dtsr = 3;
   m.lightload = false;
+  m.textload = false;
+  m.textModel = function(){};
   build = function(){
     var c;
     if (m.lightload) {
@@ -123,9 +125,20 @@ appendCircle = function(){
     }).transition().duration(1200).attr({
       "r": m.dtsr
     }).call(m.updateModel);
-    return c.exit().transition().attr({
+    c.exit().transition().attr({
       "r": 0
     }).remove();
+    if (m.textload) {
+      return c.enter().append("text").attr({
+        "class": "clrnm"
+      }).style({
+        "opacity": 0
+      }).transition().style({
+        "opacity": 1
+      }).text(function(it){
+        return it.name;
+      }).call(m.textModel);
+    }
   };
   for (i$ in m) {
     (fn$.call(this, i$));
@@ -138,30 +151,3 @@ appendCircle = function(){
     };
   }
 };
-setupslide = function(){
-  initBar();
-  initiateData();
-  scrolling();
-  return $(window).scroll(function(){
-    return scrolling();
-  });
-};
-(function(){
-  var wait;
-  wait = gnh.lsfl.length;
-  return gnh.lsfl.map(function(it){
-    return d3.tsv("./data/" + it + ".tsv", function(err, colorTSV){
-      if (colorTSV[0].name !== undefined) {
-        colorTSV = colorTSV.filter(function(it){
-          gnh.allclrls[cleanName(it.name)] = it.color;
-          it.name = cleanPunc(it.name);
-          return true;
-        });
-      }
-      gnh.clr[it] = colorTSV;
-      if (--wait === 0) {
-        return setupslide();
-      }
-    });
-  });
-})();
