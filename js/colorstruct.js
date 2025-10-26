@@ -1,5 +1,5 @@
 var Str, addClass, addColor, enterStruct, exitStruct;
-Str = require("prelude-ls").Str;
+Str = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).Str;
 addClass = function(array, className, it){};
 addColor = function(it){
   return "<div style='display:inline; background-color:" + gnh.allclrls[cleanName(it)] + ";' class=clrnmdots></div>";

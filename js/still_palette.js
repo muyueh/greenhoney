@@ -1,5 +1,5 @@
 var listsToObj, ggl, svg, cleanName, changeColor, changeColor2, updateModel, updateColor;
-listsToObj = require("prelude-ls").listsToObj;
+listsToObj = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).listsToObj;
 ggl = {};
 ggl.margin = {
   top: 10,

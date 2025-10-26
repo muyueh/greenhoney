@@ -1,5 +1,5 @@
 var flatten, countColor, b, initBar, barXY, rectXY, buildBar, toCircle, toBar, toRect, sortRect;
-flatten = require("prelude-ls").flatten;
+flatten = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).flatten;
 countColor = function(list, splitFunc){
   var freq;
   freq = {};

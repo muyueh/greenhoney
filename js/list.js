@@ -1,5 +1,5 @@
 var flatten, buildList;
-flatten = require("prelude-ls").flatten;
+flatten = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).flatten;
 buildList = function(){
   var m, build, i$;
   m = {};

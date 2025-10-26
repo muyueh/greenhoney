@@ -1,5 +1,5 @@
 var listsToObj, gnh, svg, cleanName, cleanPunc, buildModel, builPalette;
-listsToObj = require("prelude-ls").listsToObj;
+listsToObj = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).listsToObj;
 gnh = {};
 gnh.margin = {
   top: 10,
