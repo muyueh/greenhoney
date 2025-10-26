@@ -365,7 +365,7 @@ setupslide = function(){
   var wait;
   wait = gnh.lsfl.length;
   return gnh.lsfl.map(function(it){
-    return d3.tsv("http://d3gwo6jloocu32.cloudfront.net/greenhoney/data/" + it + ".tsv?v=3", function(err, colorTSV){
+    return d3.tsv("./data/" + it + ".tsv", function(err, colorTSV){
       if (colorTSV[0].name !== undefined) {
         colorTSV = colorTSV.filter(function(it){
           gnh.allclrls[cleanName(it.name)] = it.color;

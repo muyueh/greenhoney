@@ -260,7 +260,7 @@ do ->
 	wait = gnh.lsfl.length 
 	gnh.lsfl.map ->
 
-		err, colorTSV <- d3.tsv "http://d3gwo6jloocu32.cloudfront.net/greenhoney/data/" + it + ".tsv?v=3"
+            err, colorTSV <- d3.tsv "./data/" + it + ".tsv"
 		# err, colorTSV <- d3.tsv "./data/" + it + ".tsv?v=3"
 
 		if colorTSV[0].name is not undefined
