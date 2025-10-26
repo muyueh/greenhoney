@@ -1,5 +1,5 @@
 var ref$, listsToObj, join, gnh, svg, cleanName, cleanPunc, ifNaN, clone, countColor, initBar, appendCircle;
-ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join;
+ref$ = (typeof window !== "undefined" ? window.prelude : void 8) || {}, listsToObj = ref$.listsToObj, join = ref$.join;
 gnh = {};
 gnh.margin = {
   top: 10,

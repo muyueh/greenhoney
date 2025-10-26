@@ -1,5 +1,5 @@
 var ref$, listsToObj, join, flatten, isType, take, buildForce, hightlightGroup, slideDown;
-ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten, isType = ref$.isType, take = ref$.take;
+ref$ = (typeof window !== "undefined" ? window.prelude : void 8) || {}, listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten, isType = ref$.isType, take = ref$.take;
 gnh.force = null;
 buildForce = function(){
   var f, col, node, collide, build, i$;

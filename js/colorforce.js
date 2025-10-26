@@ -1,5 +1,5 @@
 var listsToObj, buildForce;
-listsToObj = require("prelude-ls").listsToObj;
+listsToObj = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).listsToObj;
 buildForce = function(){
   var f, build, i$;
   f = {};

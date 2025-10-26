@@ -1,5 +1,5 @@
 var ref$, flatten, unique, sort, fntsize, lslsclrstruct, enterStruct, move, exitStruct;
-ref$ = require("prelude-ls"), flatten = ref$.flatten, unique = ref$.unique, sort = ref$.sort;
+ref$ = (typeof window !== "undefined" ? window.prelude : void 8) || {}, flatten = ref$.flatten, unique = ref$.unique, sort = ref$.sort;
 fntsize = 35;
 lslsclrstruct = [["Android", "green"], ["Apple", "green"], ["Army", "green"], ["腥", "紅"], ["鮭", "紅"], ["暗", "鮭", "紅"]];
 enterStruct = function(){

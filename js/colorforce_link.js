@@ -1,5 +1,5 @@
 var ref$, listsToObj, join, flatten, buildForce, ifNaN, go, move;
-ref$ = require("prelude-ls"), listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten;
+ref$ = (typeof window !== "undefined" ? window.prelude : void 8) || {}, listsToObj = ref$.listsToObj, join = ref$.join, flatten = ref$.flatten;
 buildForce = function(){
   var f, build, i$;
   f = {};

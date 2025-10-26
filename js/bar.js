@@ -1,5 +1,5 @@
 var flatten, buildBar, buildRect;
-flatten = require("prelude-ls").flatten;
+flatten = ((typeof window !== "undefined" ? window.prelude : void 8) || {}).flatten;
 buildBar = function(){
   var m, build, i$;
   m = {};
